@@ -14,12 +14,8 @@ $ docker build -t binocarlos/powerstrip-weave .
 ```bash
 $ docker run -d --name powerstrip-weave \
     --expose 80 \
-    --net=host \
-    --privileged \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /usr/bin/docker:/usr/bin/docker \
-    -v /proc:/hostproc \
-    -e PROCFS=/hostproc \
     binocarlos/powerstrip-weave launch
 ```
 
@@ -33,23 +29,19 @@ To ensure matching versions of the docker client / server - we mount the docker 
 
 #### connect multiple hosts
 
-If you are running multiple servers - you pass the arguments you would normally pass to `weave launch`:
+If you are running multiple servers that you want to connect using weave - you pass the arguments you would normally pass to `weave launch`:
 
 ```bash
 $ docker run -d --name powerstrip-weave \
     --expose 80 \
-    --net=host \
-    --privileged \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /usr/bin/docker:/usr/bin/docker \
-    -v /proc:/hostproc \
-    -e PROCFS=/hostproc \
     binocarlos/powerstrip-weave launch 1.2.3.4 -password wEaVe
 ```
 
 ## run powerstrip
 
-Once the powerstrip-weave plugin is up and running - we create a powerstrip configuration:
+First create a powerstrip configuration:
 
 ```bash
 $ mkdir -p ~/powerstrip-demo
@@ -107,12 +99,8 @@ You can run normal weave commands like `expose` and `attach`:
 
 ```bash
 $ docker run --rm \
-    --net=host \
-    --privileged \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /usr/bin/docker:/usr/bin/docker \
-    -v /proc:/hostproc \
-    -e PROCFS=/hostproc \
     binocarlos/powerstrip-weave expose 10.255.0.1/8
 ```
 
@@ -121,15 +109,11 @@ $ docker run --rm \
 To shutdown cleanly (i.e. close the plugin / weave and remove the wait-for-weave volume container):
 
 ```bash
-$ docker stop powerstrip-weave
+$ docker stop powerstrip-weave && docker rm powerstrip-weave
 $ docker rm weavetools
 $ docker run --rm \
-    --net=host \
-    --privileged \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /usr/bin/docker:/usr/bin/docker \
-    -v /proc:/hostproc \
-    -e PROCFS=/hostproc \
     binocarlos/powerstrip-weave stop
 ```
 
