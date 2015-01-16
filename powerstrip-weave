@@ -1,0 +1,28 @@
+#!/bin/bash
+
+cmd-weave(){
+  /usr/local/bin/weave $@
+}
+
+# we ensure there is a weavetools container with
+# wait-for-weave in a volume
+cmd-launch(){
+  cmd-weave $@
+  docker run --name weavetools binocarlos/wait-for-weave
+  node /srv/plugin/index.js
+}
+
+# reomve the weavetools container
+cmd-stop(){
+  cmd-weave $@
+}
+
+main() {
+  case "$1" in
+  launch)             cmd-launch $@;;
+  stop)               cmd-stop $@;;
+  *)                  cmd-weave $@;;
+  esac
+}
+
+main "$@"
