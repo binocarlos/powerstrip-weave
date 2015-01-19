@@ -1,3 +1,6 @@
+var create = require('./actions/create')
+var start = require('./actions/start')
+
 /*
 
   this is the single endpoint that will route based on the 
@@ -25,7 +28,28 @@ module.exports = function(opts){
     callback(err, statusCode, body)
     
   */
-  return function(body, callback){
-    callback(null, 200, body)
+  return function(req, callback){
+
+    var response = {
+      Method:req.Method,
+      Request:req.Request,
+      Body:req.body
+    }
+
+    /*
+    
+      main router
+      
+    */
+    if(req.method=="POST"){
+      if(req.Request.match(/\/container\/create$/)){
+        response.Body = create(req)
+      }
+      else if(req.Request.match(/\/container\/\w+\/start/)){
+        response.Body = start(req)
+      }
+    }
+    
+    callback(null, 200, response)
   }
 }
