@@ -1,11 +1,13 @@
-var http = require('http')
-
-var server = http.createServer(function(req, res){
-  console.log('-------------------------------------------');
-  console.log(req.url)
-  res.end('ok')
+var args = require('minimist')(process.argv, {
+  alias:{
+    p:'port'
+  },
+  default:{
+    port:80
+  }
 })
-
-server.listen(80, function(){
-  console.log('server listening on port 80')
+var Server = require('./server')
+var server = Server(args)
+server.listen(function(){
+  console.log('server listening on port: ' + args.port)
 })
