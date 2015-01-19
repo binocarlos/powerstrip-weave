@@ -4,11 +4,14 @@
   "description": "HTTP endpoint for the powerstrip-weave plugin",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "set -e; for t in test/*.js; do node $t; done"
   },
   "author": "Kai Davenport",
   "license": "MIT",
   "dependencies": {
     "routes-router": "^4.1.2"
+  },
+  "devDependencies": {
+    "tape": "^3.4.0"
   }
 }
