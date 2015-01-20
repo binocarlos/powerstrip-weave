@@ -9,5 +9,5 @@
 */
 
 module.exports = function(req, callback){
-  
+  callback(null, 200, req)
 }
