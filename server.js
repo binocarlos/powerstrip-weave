@@ -1,6 +1,6 @@
 var http = require('http')
 var concat = require('concat-stream')
-var Plugin = require('./plugin')
+var Adapter = require('./adapter')
 
 module.exports = function(opts){
 
