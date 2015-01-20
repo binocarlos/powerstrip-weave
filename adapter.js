@@ -1,6 +1,18 @@
 var create = require('./actions/create')
 var start = require('./actions/start')
 
+var routes = [{
+  method:'POST',
+  url:/\/container\/create$/,
+  type:'pre-hook',
+  handler:create
+},{
+  method:'POST',
+  url:/\/container\/\w+\/start/,
+  type:'post-hook',
+  handler:start
+}]
+
 /*
 
   this is the single endpoint that will route based on the 
@@ -29,8 +41,6 @@ module.exports = function(opts){
     
   */
   return function(req, callback){
-
-    console.dir(req)
     
     var response = {
       Method:req.Method,
@@ -40,18 +50,9 @@ module.exports = function(opts){
 
     /*
     
-      main router
+      TODO: loop over the routes and match
       
     */
-    if(req.method=="POST"){
-      if(req.Request.match(/\/container\/create$/)){
-        //response.Body = create(req)
-      }
-      else if(req.Request.match(/\/container\/\w+\/start/)){
-        //response.Body = start(req)
-      }
-    }
-    
     callback(null, 200, response)
   }
 }
