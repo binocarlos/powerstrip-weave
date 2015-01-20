@@ -95,7 +95,16 @@ $ docker run --rm -ti --name mysql-backup \
 
 ## weave commands
 
-You can run normal weave commands like `expose` and `attach`:
+You can get the status of the weave network by running the `status` command:
+
+```bash
+$ docker run --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /usr/bin/docker:/usr/bin/docker \
+    binocarlos/powerstrip-weave status
+```
+
+You can run normal weave network commands like `expose` and `attach`:
 
 ```bash
 $ docker run --rm \
