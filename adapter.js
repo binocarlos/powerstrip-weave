@@ -30,6 +30,8 @@ module.exports = function(opts){
   */
   return function(req, callback){
 
+    console.dir(req)
+    
     var response = {
       Method:req.Method,
       Request:req.Request,
@@ -43,10 +45,10 @@ module.exports = function(opts){
     */
     if(req.method=="POST"){
       if(req.Request.match(/\/container\/create$/)){
-        response.Body = create(req)
+        //response.Body = create(req)
       }
       else if(req.Request.match(/\/container\/\w+\/start/)){
-        response.Body = start(req)
+        //response.Body = start(req)
       }
     }
     
