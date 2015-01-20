@@ -20,10 +20,10 @@ cmd-weave(){
 cmd-launch(){
   docker run --name weavetools binocarlos/wait-for-weave
   cmd-weave $@
-  node /srv/plugin/index.js
+  node /srv/app/index.js
 }
 
-# reomve the weavetools container
+# remove the weavetools container
 cmd-stop(){
   cmd-weave $@
 }

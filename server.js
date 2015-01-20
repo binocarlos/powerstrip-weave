@@ -15,6 +15,7 @@ module.exports = function(opts){
       
     */
     req.pipe(concat(function(body){
+      body = body.toString()
       plugin(JSON.parse(body), function(err, code, body){
         res.statusCode = code
         if(code==200 && body){

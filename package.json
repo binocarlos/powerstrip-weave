@@ -6,11 +6,14 @@
   "scripts": {
     "test": "set -e; for t in test/*.js; do node $t; done"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binocarlos/powerstrip-weave.git"
+  },
   "author": "Kai Davenport",
   "license": "MIT",
   "dependencies": {
-    "concat-stream": "^1.4.7",
-    "routes-router": "^4.1.2"
+    "concat-stream": "^1.4.7"
   },
   "devDependencies": {
     "tape": "^3.4.0"
