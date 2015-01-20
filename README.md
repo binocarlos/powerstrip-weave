@@ -111,12 +111,19 @@ You could even run `weave run` using this method although it would not wait for 
 To shutdown cleanly (i.e. close the plugin / weave and remove the wait-for-weave volume container):
 
 ```bash
-$ docker stop powerstrip-weave && docker rm powerstrip-weave
-$ docker rm weavetools
 $ docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /usr/bin/docker:/usr/bin/docker \
     binocarlos/powerstrip-weave stop
+```
+
+If you named the plugin container something different - pass the name as the first argument to the `stop` command:
+
+```bash
+$ docker run --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /usr/bin/docker:/usr/bin/docker \
+    binocarlos/powerstrip-weave stop powerstrip-weave
 ```
 
 ## notes
