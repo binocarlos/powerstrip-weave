@@ -104,6 +104,8 @@ $ docker run --rm \
     binocarlos/powerstrip-weave expose 10.255.0.1/8
 ```
 
+You could even run `weave run` using this method although it would not wait for the weave network to be connected if you use this method.
+
 ## shutdown
 
 To shutdown cleanly (i.e. close the plugin / weave and remove the wait-for-weave volume container):
