@@ -19,19 +19,29 @@ cmd-weave(){
 # wait-for-weave in a volume
 cmd-launch(){
   docker run --name weavetools binocarlos/wait-for-weave
-  cmd-weave $@
+  cmd-weave launch $@
   node /srv/app/index.js
 }
 
+
+# remove the powerstrip-weave container (or whatever it is called)
+# stop weave itself
 # remove the weavetools container
 cmd-stop(){
-  cmd-weave $@
+  local pluginname=$1
+  if [[ -z $pluginname ]]; then
+    pluginname="powerstrip-weave"
+  fi
+  cmd-weave stop
+  docker stop $pluginname
+  docker rm $pluginname
+  docker rm weavetools
 }
 
 main() {
   case "$1" in
-  launch)             cmd-launch $@;;
-  stop)               cmd-stop $@;;
+  launch)             shift; cmd-launch $@;;
+  stop)               shift; cmd-stop $@;;
   weave)              shift; cmd-weave-cli $@;;
   *)                  cmd-weave $@;;
   esac
