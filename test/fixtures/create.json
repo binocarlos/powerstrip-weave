@@ -1,0 +1,47 @@
+{
+   "Hostname":"",
+   "Domainname": "",
+   "User":"",
+   "Memory":0,
+   "MemorySwap":0,
+   "CpuShares": 512,
+   "Cpuset": "0,1",
+   "AttachStdin":false,
+   "AttachStdout":true,
+   "AttachStderr":true,
+   "Tty":false,
+   "OpenStdin":false,
+   "StdinOnce":false,
+   "Env":null,
+   "Cmd":[
+      "-c 1 10.255.0.10"
+   ],
+   "Entrypoint": "ping",
+   "Image":"base",
+   "Volumes":{
+           "/tmp": {}
+   },
+   "WorkingDir":"",
+   "NetworkDisabled": false,
+   "MacAddress":"12:34:56:78:9a:bc",
+   "ExposedPorts":{
+           "22/tcp": {}
+   },
+   "SecurityOpts": [""],
+   "HostConfig": {
+     "Binds":["/tmp:/tmp"],
+     "Links":["redis3:redis"],
+     "LxcConf":{"lxc.utsname":"docker"},
+     "PortBindings":{ "22/tcp": [{ "HostPort": "11022" }] },
+     "PublishAllPorts":false,
+     "Privileged":false,
+     "Dns": ["8.8.8.8"],
+     "DnsSearch": [""],
+     "VolumesFrom": ["parent", "other:ro"],
+     "CapAdd": ["NET_ADMIN"],
+     "CapDrop": ["MKNOD"],
+     "RestartPolicy": { "Name": "", "MaximumRetryCount": 0 },
+     "NetworkMode": "bridge",
+     "Devices": []
+  }
+}
