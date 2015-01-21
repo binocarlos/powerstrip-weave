@@ -15,8 +15,15 @@ module.exports = function(opts){
       
     */
     req.pipe(concat(function(body){
-      body = body.toString()
-      adapter(JSON.parse(body), function(err, code, body){
+      body = JSON.parse(body.toString())
+
+      /*
+      
+        pass off the JSON body to the adapter which will route
+        the /containers/create and /containers/:id/start handlers
+        
+      */
+      adapter(body, function(err, code, body){
         res.statusCode = code
         if(code==200 && body){
           res.headers['Content-type'] = 'application/json'
