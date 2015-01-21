@@ -21,7 +21,7 @@ tape('inject --volumes-from=weavetools into a create packet', function(t){
 
   create(req, function(err, code, response){
     t.equal(code, 200, 'the create code is 200')
-    t.deepEqual(response.Body.HostConfig.VolumesFrom, ["parent", "other:ro", "weavetools:ro"], 'weavetools in the volumes from')
+    t.deepEqual(response.Body.HostConfig.VolumesFrom, ["parent", "other:ro", "weavewait:ro"], 'weavetools in the volumes from')
     t.equal(response.Body.Cmd, 'ping -c 1 10.255.0.10', 'the entrypoint has been prepended to the cmd')
     t.equal(response.Body.Entrypoint, '/home/weavetools/wait-for-weave', 'the entrypoint has been set to wait-for-weave')
     t.end()
