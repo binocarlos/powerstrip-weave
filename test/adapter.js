@@ -43,10 +43,13 @@ tape('the Adapter should route custom create and start handlers', function(t){
   var adapter = Adapter({
     create:function(req, callback){
       req.HasSeenCreate = 'yes'
+      t.equal(req.Body.fruit, 'apples', 'request body has apples')
       callback(null, req)
     },
     start:function(req, callback){
       req.HasSeenStart = 'yes'
+      t.equal(req.Body.fruit, 'oranges', 'request body has oranges')
+      t.equal(req.Request, '/v1.16/containers/123/start', 'request url matches')
       callback(null, req)
     }
   })
@@ -66,7 +69,9 @@ tape('the Adapter should route custom create and start handlers', function(t){
         ClientRequest: {
           Method:'POST',
           Request:'/v1.16/containers/create',
-          Body:{}
+          Body:{
+            fruit:'apples'
+          }
         }
       }
 
@@ -84,7 +89,24 @@ tape('the Adapter should route custom create and start handlers', function(t){
       
     */
     function(next){
-      next()
+      var req = {
+        PowerstripProtocolVersion: 1,
+        Type: "post-hook",
+        ClientRequest: {
+          Method:'POST',
+          Request:'/v1.16/containers/123/start',
+          Body:{
+            fruit:'oranges'
+          }
+        }
+      }
+
+      adapter(req, function(err, code, response){
+        t.error(err, 'there is no error')
+        t.equal(code, 200, '200 status code for START')
+        t.equal(response.ModifiedClientRequest.HasSeenStart, 'yes', 'the /containers/123/start route was matched')
+        next()
+      })
     }
   ], function(err){
     t.error(err, 'there is no error')
