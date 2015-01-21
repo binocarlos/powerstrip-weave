@@ -45,13 +45,13 @@ First create a powerstrip configuration:
 
 ```bash
 $ mkdir -p ~/powerstrip-demo
-$ cat > ~/powerstrip-demo/plugins.yml <<EOF
+$ cat > ~/powerstrip-demo/adapters.yml <<EOF
 endpoints:
   "/*/containers/create":
     pre: [weave]
   "/*/containers/*/start":
     post: [weave]
-plugins:
+adapters:
   weave: http://weave/v1/extension
 EOF
 ```
@@ -61,7 +61,7 @@ And then run the powerstrip container and link it to the powerstrip-weave contai
 ```bash
 $ docker run -d --name powerstrip \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v ~/powerstrip-demo/plugins.yml:/etc/powerstrip/plugins.yml \
+  -v ~/powerstrip-demo/adapters.yml:/etc/powerstrip/adapters.yml \
   --link powerstrip-weave:weave \
   -p 2375:4243 \
   clusterhq/powerstrip
