@@ -8,6 +8,6 @@ var args = require('minimist')(process.argv, {
 })
 var Server = require('./server')
 var server = Server(args)
-server.listen(function(){
+server.listen(args.port, function(){
   console.log('server listening on port: ' + args.port)
 })
