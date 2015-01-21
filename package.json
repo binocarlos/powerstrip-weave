@@ -18,6 +18,6 @@
   },
   "devDependencies": {
     "tape": "^3.4.0",
-    "async": "^0.9.0",
+    "async": "^0.9.0"
   }
 }
