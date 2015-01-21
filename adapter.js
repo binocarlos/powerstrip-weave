@@ -41,18 +41,31 @@ module.exports = function(opts){
     
   */
   return function(req, callback){
-    
-    var response = {
-      Method:req.Method,
-      Request:req.Request,
-      Body:req.body
+
+    function reply(err, response){
+
+      if(err) return callback(err)
+      
+      callback(null, 200, {
+        PowerstripProtocolVersion: 1,
+        ModifiedClientRequest: response
+      })
     }
 
-    /*
-    
-      TODO: loop over the routes and match
-      
-    */
-    callback(null, 200, response)
+    var handler
+
+    routes.forEach(function(route){
+      if(handler) return
+      if(route.method==req.ClientRequest.Method && route.type==req.Type && route.url.match(req.ClientRequest.Request)){
+        handler = route.handler
+      }
+    })
+
+    if(handler){
+      handler(req.ClientRequest, reply)
+    }
+    else{
+      reply(null, req.ClientRequest)
+    }
   }
 }
