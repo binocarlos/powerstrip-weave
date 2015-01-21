@@ -23,6 +23,11 @@ cmd-launch(){
   node /srv/app/index.js
 }
 
+# just launch the node server for quick restarts when developing
+cmd-softlaunch(){
+  node /srv/app/index.js
+}
+
 # remove the powerstrip-weave container (or whatever it is called)
 # stop weave itself
 # remove the weavetools container
@@ -40,6 +45,7 @@ cmd-stop(){
 main() {
   case "$1" in
   launch)             shift; cmd-launch "$@";;
+  softlaunch)         shift; cmd-softlaunch "$@";;
   stop)               shift; cmd-stop "$@";;
   weave)              shift; cmd-weave-cli "$@";;
   *)                  cmd-weave "$@";;
