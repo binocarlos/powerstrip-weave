@@ -63,7 +63,7 @@ $ docker run -d --name powerstrip \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v ~/powerstrip-demo/plugins.yml:/etc/powerstrip/plugins.yml \
   --link powerstrip-weave:weave \
-  -p 2375:2375 \
+  -p 2375:4243 \
   clusterhq/powerstrip
 ```
 
