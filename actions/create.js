@@ -2,14 +2,14 @@
 
   pre-hook responsible for:
 
-   * adding weavetools to the volumes-from
+   * adding weavewait to the volumes-from
    * remapping the entrypoint to be wait-for-weave
    * prepending the original entrypoint onto the arguments
   
 */
 
 const WAIT_FOR_WEAVE_PATH = '/home/weavetools/wait-for-weave'
-const WAIT_FOR_WEAVE_VOLUME = 'weavetools:ro'
+const WAIT_FOR_WEAVE_VOLUME = 'weavewait:ro'
 
 module.exports = function(req, callback){
   var cmd = [req.Body.Entrypoint, req.Body.Cmd].join(' ')
