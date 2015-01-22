@@ -15,6 +15,9 @@ module.exports = function(req, callback){
   var cmd = [req.Body.Entrypoint, req.Body.Cmd].join(' ')
   req.Body.Entrypoint = WAIT_FOR_WEAVE_PATH
   req.Body.Cmd = cmd
+  if(!req.Body.HostConfig.VolumesFrom){
+    req.Body.HostConfig.VolumesFrom = []
+  }
   req.Body.HostConfig.VolumesFrom.push(WAIT_FOR_WEAVE_VOLUME)
   callback(null, 200, req)
 }
