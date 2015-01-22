@@ -1,0 +1,96 @@
+[{
+    "AppArmorProfile": "",
+    "Args": [
+        "hello"
+    ],
+    "Config": {
+        "AttachStderr": true,
+        "AttachStdin": false,
+        "AttachStdout": true,
+        "Cmd": [
+            "echo",
+            "hello"
+        ],
+        "CpuShares": 0,
+        "Cpuset": "",
+        "Domainname": "",
+        "Entrypoint": null,
+        "Env": [
+            "WEAVE_CIDR=10.255.0.10/8",
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+        ],
+        "ExposedPorts": null,
+        "Hostname": "dc4f568412fb",
+        "Image": "ubuntu",
+        "MacAddress": "",
+        "Memory": 0,
+        "MemorySwap": 0,
+        "NetworkDisabled": false,
+        "OnBuild": null,
+        "OpenStdin": false,
+        "PortSpecs": null,
+        "StdinOnce": false,
+        "Tty": false,
+        "User": "",
+        "Volumes": null,
+        "WorkingDir": ""
+    },
+    "Created": "2015-01-22T00:19:57.240560495Z",
+    "Driver": "devicemapper",
+    "ExecDriver": "native-0.2",
+    "HostConfig": {
+        "Binds": null,
+        "CapAdd": null,
+        "CapDrop": null,
+        "ContainerIDFile": "",
+        "Devices": [],
+        "Dns": null,
+        "DnsSearch": null,
+        "ExtraHosts": null,
+        "IpcMode": "",
+        "Links": null,
+        "LxcConf": [],
+        "NetworkMode": "bridge",
+        "PortBindings": {},
+        "Privileged": false,
+        "PublishAllPorts": false,
+        "RestartPolicy": {
+            "MaximumRetryCount": 0,
+            "Name": ""
+        },
+        "SecurityOpt": null,
+        "VolumesFrom": null
+    },
+    "HostnamePath": "/var/lib/docker/containers/dc4f568412fbfb800e0b27be0bb681a3cba745bb621eebeed24f85ab7edb7854/hostname",
+    "HostsPath": "/var/lib/docker/containers/dc4f568412fbfb800e0b27be0bb681a3cba745bb621eebeed24f85ab7edb7854/hosts",
+    "Id": "dc4f568412fbfb800e0b27be0bb681a3cba745bb621eebeed24f85ab7edb7854",
+    "Image": "8eaa4ff06b53ff7730c4d7a7e21b4426a4b46dee064ca2d5d90d757dc7ea040a",
+    "MountLabel": "",
+    "Name": "/lonely_mccarthy",
+    "NetworkSettings": {
+        "Bridge": "",
+        "Gateway": "",
+        "IPAddress": "",
+        "IPPrefixLen": 0,
+        "MacAddress": "",
+        "PortMapping": null,
+        "Ports": null
+    },
+    "Path": "echo",
+    "ProcessLabel": "",
+    "ResolvConfPath": "/var/lib/docker/containers/dc4f568412fbfb800e0b27be0bb681a3cba745bb621eebeed24f85ab7edb7854/resolv.conf",
+    "State": {
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2015-01-22T00:19:57.355074171Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2015-01-22T00:19:57.348074422Z"
+    },
+    "Volumes": {},
+    "VolumesRW": {}
+}
+]
