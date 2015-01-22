@@ -1,5 +1,5 @@
 var tape = require('tape')
-var utils = require('./utils')
+var utils = require('../utils')
 
 tape('extract a container id from a /containers/start request', function(t){
 
