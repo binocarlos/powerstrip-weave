@@ -22,7 +22,7 @@ $ docker run -d --name powerstrip-weave \
 The `launch` command does the following:
 
  * runs the weave container (by running weave launch)
- * runs a container called `weavetools` so its volume can be used to access the `wait-for-weave` binary
+ * runs a container called `weavewait` so its volume can be used to access the [wait-for-weave](https://github.com/binocarlos/wait-for-weave) binary
  * launches the HTTP plugin server
 
 To ensure matching versions of the docker client / server - we mount the docker socket and docker binary from the host.
