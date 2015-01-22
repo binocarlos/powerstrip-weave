@@ -7,13 +7,13 @@
   
 */
 
-var async = require('async')
-var utils = require('../utils')
-var cp = require('child_process')
+var async = require('async');
+var utils = require('../utils');
+var cp = require('child_process');
 
 module.exports = function(req, callback){
 
-  var containerID = utils.extractStartID(req.Request)
+  var containerID = utils.extractStartID(req.Request);
 
   /*
   
@@ -22,23 +22,23 @@ module.exports = function(req, callback){
     
   */
   cp.exec("docker inspect " + containerID, function(err, stdout, stderr){
-    if(err) return callback(err)
-    if(stderr) return callback(stderr.toString())
+    if(err) return callback(err);
+    if(stderr) return callback(stderr.toString());
 
-    var containerInfo = JSON.parse(stdout.toString())
-    var weaveCidr = utils.extractWeaveEnv(containerInfo)
+    var containerInfo = JSON.parse(stdout.toString());
+    var weaveCidr = utils.extractWeaveEnv(containerInfo);
 
     // there is no WEAVE_CIDR environment variable so just return - no weave today
-    if(!weaveCidr) return callback(null, req)
+    if(!weaveCidr) return callback(null, req);
 
     // we do this thing (right here, right now)
     // we are inside the container and so will use /srv/app/run.sh attach $cidr $containerid
     cp.exec("/srv/app/run.sh attach " + weaveCidr + " " + containerID, function(err, stdout, stderr){
-      if(err) return callback(err)
-      if(stderr) return callback(stderr.toString())
+      if(err) return callback(err);
+      if(stderr) return callback(stderr.toString());
 
       // the network should be attaching itself and the wait-for-weave doing its thing!
-      callback(null, req)
+      callback(null, req);
     })
 
   })

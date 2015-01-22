@@ -1,10 +1,10 @@
-var http = require('http')
-var concat = require('concat-stream')
-var Adapter = require('./adapter')
+var http = require('http');
+var concat = require('concat-stream');
+var Adapter = require('./adapter');
 
 module.exports = function(opts){
 
-  var adapter = Adapter(opts)
+  var adapter = Adapter(opts);
   
   return http.createServer(function(req, res){
 
@@ -15,7 +15,7 @@ module.exports = function(opts){
       
     */
     req.pipe(concat(function(body){
-      body = JSON.parse(body.toString())
+      body = JSON.parse(body.toString());
 
       /*
       
@@ -24,12 +24,12 @@ module.exports = function(opts){
         
       */
       adapter(body, function(err, code, body){
-        res.statusCode = code
+        res.statusCode = code;
         if(code==200 && body){
-          res.headers['Content-type'] = 'application/json'
-          body = JSON.stringify(body)
+          res.headers['Content-type'] = 'application/json';
+          body = JSON.stringify(body);
         }
-        res.end(body)
+        res.end(body);
       })
     }))
   })

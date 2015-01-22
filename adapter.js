@@ -1,5 +1,5 @@
-var create = require('./actions/create')
-var start = require('./actions/start')
+var create = require('./actions/create');
+var start = require('./actions/start');
 
 /*
 
@@ -12,7 +12,7 @@ var start = require('./actions/start')
 
 module.exports = function(opts){
 
-  opts = opts || {}
+  opts = opts || {};
 
   var routes = [{
     method:'POST',
@@ -24,18 +24,18 @@ module.exports = function(opts){
     url:/\/[\w\.]+\/containers\/\w+\/start/,
     type:'post-hook',
     handler:opts.start || start
-  }]
+  }];
 
   return function(req, callback){
 
     function reply(err, response){
 
-      if(err) return callback(err)
+      if(err) return callback(err);
       
       callback(null, 200, {
         PowerstripProtocolVersion: 1,
         ModifiedClientRequest: response
-      })
+      });
     }
 
     /*
@@ -45,21 +45,21 @@ module.exports = function(opts){
       if no handler is found then we return the request unmolested
       
     */
-    var handler
+    var handler;
 
     routes.forEach(function(route){
-      if(handler) return
-      var url = req.ClientRequest.Request || ''
+      if(handler) return;
+      var url = req.ClientRequest.Request || '';
       if(route.method==req.ClientRequest.Method && route.type==req.Type && url.match(route.url)){
-        handler = route.handler
+        handler = route.handler;
       }
     })
 
     if(handler){
-      handler(req.ClientRequest, reply)
+      handler(req.ClientRequest, reply);
     }
     else{
-      reply(null, req.ClientRequest)
+      reply(null, req.ClientRequest);
     }
   }
 }

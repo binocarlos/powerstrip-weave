@@ -7,9 +7,9 @@ module.exports = {
     
   */
   extractStartID:function(url){
-    var id = url.replace(/^.*?\/containers\//, '')
-    id = id.replace(/\/.*$/, '')
-    return id
+    var id = url.replace(/^.*?\/containers\//, '');
+    id = id.replace(/\/.*$/, '');
+    return id;
   },
 
 
@@ -20,14 +20,14 @@ module.exports = {
     
   */
   extractWeaveEnv:function(packet){
-    var envVars = packet[0].Config.Env || []
+    var envVars = packet[0].Config.Env || [];
 
     var weaveVars = envVars.filter(function(envVar){
-      return envVar.indexOf('WEAVE_CIDR=')==0
+      return envVar.indexOf('WEAVE_CIDR=')==0;
     }).map(function(envVar){
-      return envVar.split('=')[1]
+      return envVar.split('=')[1];
     })
 
-    return weaveVars[0]
+    return weaveVars[0];
   }
 }
