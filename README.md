@@ -47,9 +47,9 @@ First create a powerstrip configuration:
 $ mkdir -p ~/powerstrip-demo
 $ cat > ~/powerstrip-demo/adapters.yml <<EOF
 endpoints:
-  "/*/containers/create":
+  "POST /*/containers/create":
     pre: [weave]
-  "/*/containers/*/start":
+  "POST /*/containers/*/start":
     post: [weave]
 adapters:
   weave: http://weave/v1/extension
