@@ -1,6 +1,6 @@
 var tape = require('tape')
 var utils = require('../utils')
-var inspect = require('./fixtures/inspect')
+var inspect = require('./fixtures/inspect.json')
 
 tape('extract a container id from a /containers/start request', function(t){
 
