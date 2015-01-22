@@ -140,6 +140,7 @@ $ docker run --rm \
  * [plan for this project](https://github.com/zettio/weave/issues/47#issuecomment-69471269)
  * [running weave inside a container](https://github.com/zettio/weave/issues/312)
  * [mounting the blocking binary in a volume](https://github.com/zettio/weave/issues/47#issuecomment-68787816)
+ * [wait-for-weave](https://github.com/binocarlos/wait-for-weave)
 
 ## licence
 
