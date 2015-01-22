@@ -1,7 +1,7 @@
 powerstrip-weave
 ================
 
-A [Powerstrip](https://github.com/ClusterHQ/powerstrip) plugin that runs [weave](https://github.com/zettio/weave) inside a container and ensures that containers are connected to the weave network before running their entrypoints.
+A [Powerstrip](https://github.com/ClusterHQ/powerstrip) adapter that runs [weave](https://github.com/zettio/weave) inside a container and ensures that containers are connected to the weave network before running their entrypoints.
 
 ## install
 
@@ -9,7 +9,7 @@ A [Powerstrip](https://github.com/ClusterHQ/powerstrip) plugin that runs [weave]
 $ docker build -t binocarlos/powerstrip-weave .
 ```
 
-## run the plugin
+## run the adapter
 
 ```bash
 $ docker run -d --name powerstrip-weave \
@@ -23,7 +23,7 @@ The `launch` command does the following:
 
  * runs the weave container (by running weave launch)
  * runs a container called `weavewait` so its volume can be used to access the [wait-for-weave](https://github.com/binocarlos/wait-for-weave) binary
- * launches the HTTP plugin server
+ * launches the HTTP adapter server
 
 To ensure matching versions of the docker client / server - we mount the docker socket and docker binary from the host.
 
@@ -117,7 +117,7 @@ You could even run `weave run` using this method although it would not wait for 
 
 ## shutdown
 
-To shutdown cleanly (i.e. close the plugin / weave and remove the wait-for-weave volume container):
+To shutdown cleanly (i.e. close the adapter / weave and remove the wait-for-weave volume container):
 
 ```bash
 $ docker run --rm \
@@ -126,7 +126,7 @@ $ docker run --rm \
     binocarlos/powerstrip-weave stop
 ```
 
-If you named the plugin container something different - pass the name as the first argument to the `stop` command:
+If you named the adapter container something different - pass the name as the first argument to the `stop` command:
 
 ```bash
 $ docker run --rm \
