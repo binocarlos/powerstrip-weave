@@ -9,7 +9,7 @@
 */
 var utils = require('../utils')
 
-const WAIT_FOR_WEAVE_PATH = '/home/weavetools/wait-for-weave';
+const WAIT_FOR_WEAVE_PATH = '/home/weavewait/wait-for-weave';
 const WAIT_FOR_WEAVE_VOLUME = 'weavewait:ro';
 
 module.exports = function(req, callback){
