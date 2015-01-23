@@ -1,7 +1,7 @@
 var tape = require('tape');
 var async = require('async');
 var Adapter = require('../adapter.js');
-
+var imagedata = require('./fixtures/image.json');
 
 tape('the Adapter should expose a single function', function(t){
   t.equal(typeof(Adapter), 'function');
@@ -10,7 +10,11 @@ tape('the Adapter should expose a single function', function(t){
 
 tape('the Adapter should not alter a GET request pre-hook', function(t){
 
-  var adapter = Adapter();
+  var adapter = Adapter({
+    getImageData:function(imageName, done){
+      done(null, imagedata)
+    }
+  });
 
   var req = {
     PowerstripProtocolVersion: 1,
@@ -41,7 +45,10 @@ tape('the Adapter should route custom create and start handlers', function(t){
 
   var seen = {}
   var adapter = Adapter({
-    create:function(req, callback){
+    getImageData:function(imageName, done){
+      done(null, imagedata)
+    },
+    create:function(req, fetchImageData, callback){
       seen.HasSeenCreate = 'yes';
       t.equal(req.Body.fruit, 'apples', 'request body has apples');
       callback(null, req);
