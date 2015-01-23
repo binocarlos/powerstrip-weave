@@ -20,7 +20,7 @@ module.exports = {
     
   */
   extractWeaveEnv:function(packet){
-    var envVars = packet[0].Config.Env || [];
+    var envVars = packet.Config.Env || [];
 
     var weaveVars = envVars.filter(function(envVar){
       return envVar.indexOf('WEAVE_CIDR=')==0;

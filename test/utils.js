@@ -12,7 +12,7 @@ tape('extract a container id from a /containers/start request', function(t){
 
 tape('extract the WEAVE_CIDR env variable from a docker inspect packet', function(t){
 
-  var cidr = utils.extractWeaveEnv(inspect);
+  var cidr = utils.extractWeaveEnv(inspect[0]);
 
   t.equal(cidr, '10.255.0.10/8');
   t.end();
