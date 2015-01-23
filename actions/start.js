@@ -7,13 +7,31 @@
   
 */
 
-var async = require('async');
 var utils = require('../utils');
 var cp = require('child_process');
 
+function getContainerEnv(cid, callback) {
+  cp.exec("docker inspect --format='{{json .Config.Env}}' " + cid,
+          function(err, stdout, stderr) {
+            if (err) return callback(err);
+            if (stderr && stderr.length > 0) return callback(stderr.toString());
+            var env = JSON.parse(stdout.toString());
+            callback(null, env);
+          });
+}
+
+function runWeaveCommand(cmd, callback) {
+  cp.exec("/srv/app/run.sh " + cmd, function(err, stdout, stderr){
+    if(err) return callback(err);
+    if(stderr) return callback(stderr.toString());
+    // the network should be attaching itself and the wait-for-weave doing its thing!
+    callback(null, stdout.toString());
+  });
+}
+
 module.exports = function(req, callback){
 
-  var containerID = utils.extractStartID(req.Request);
+  var containerID = utils.extractStartID(req.ClientRequest.Request);
 
   /*
   
@@ -21,26 +39,21 @@ module.exports = function(req, callback){
     instructions are inside the env regarding a weave CIDR address
     
   */
-  cp.exec("docker inspect " + containerID, function(err, stdout, stderr){
-    if(err) return callback(err);
-    if(stderr) return callback(stderr.toString());
+  getContainerEnv(containerID, function(err, env) {
+    if (err !== null) {
+      return callback(err);
+    }
 
-    var containerInfo = JSON.parse(stdout.toString());
-    var weaveCidr = utils.extractWeaveEnv(containerInfo);
+    var weaveCidr = utils.extractWeaveFromEnv(env);
 
     // there is no WEAVE_CIDR environment variable so just return - no weave today
-    if(!weaveCidr) return callback(null, req);
+    if(!weaveCidr) return callback(null);
 
     // we do this thing (right here, right now)
     // we are inside the container and so will use /srv/app/run.sh attach $cidr $containerid
-    cp.exec("/srv/app/run.sh attach " + weaveCidr + " " + containerID, function(err, stdout, stderr){
-      if(err) return callback(err);
-      if(stderr) return callback(stderr.toString());
 
-      // the network should be attaching itself and the wait-for-weave doing its thing!
-      callback(null, req);
-    })
-
-  })
-  
+    runWeaveCommand("attach '" + weaveCidr + "' '" + containerID + "'", function(err) {
+      return callback(err);
+    });
+  });
 }

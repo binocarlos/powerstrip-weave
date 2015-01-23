@@ -4,7 +4,7 @@ var start = require('./actions/start');
 /*
 
   this is the single endpoint that will route based on the 
-  Request parameter of the JSON packet
+  Request field of the JSON packet
 
   it can be configured with opts
   
@@ -26,23 +26,12 @@ module.exports = function(opts){
     handler:opts.start || start
   }];
 
-  return function(req, callback){
-
-    function reply(err, response){
-
-      if(err) return callback(err);
-      
-      callback(null, 200, {
-        PowerstripProtocolVersion: 1,
-        ModifiedClientRequest: response
-      });
-    }
-
+  return function(req, reply){
     /*
     
-      handler is a function that will modify the request somehow
-
-      if no handler is found then we return the request unmolested
+      handler is a function that will return either a modified
+      request, or null meaning 'no change'. The handler can mutate the
+      req safely.
       
     */
     var handler;
@@ -56,10 +45,26 @@ module.exports = function(opts){
     })
 
     if(handler){
-      handler(req.ClientRequest, reply);
+      handler(req, function(err, res) {
+        if (err) reply(err);
+        else if (res) {
+          reply(null, res);
+        }
+        else {
+          switch(req.Type){
+          case 'pre-hook':
+            req.ModifiedClientRequest = req.ClientRequest;
+            break;
+          case 'post-hook':
+            req.ModifiedServerResponse = req.ServerResponse;
+            break;
+          }
+          reply(null, req);
+        }
+      });
     }
     else{
-      reply(null, req.ClientRequest);
+      reply(Error("Not handled"));
     }
   }
 }

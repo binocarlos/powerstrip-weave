@@ -8,16 +8,27 @@
   
 */
 
+var utils = require('../utils');
+
 const WAIT_FOR_WEAVE_PATH = '/home/weavetools/wait-for-weave';
 const WAIT_FOR_WEAVE_VOLUME = 'weavewait:ro';
 
 module.exports = function(req, callback){
-  var cmd = [req.Body.Entrypoint, req.Body.Cmd].join(' ');
-  req.Body.Entrypoint = WAIT_FOR_WEAVE_PATH;
-  req.Body.Cmd = cmd;
-  if(!req.Body.HostConfig.VolumesFrom){
-    req.Body.HostConfig.VolumesFrom = [];
+  var body = JSON.parse(req.ClientRequest.Body);
+  if (utils.extractWeaveFromEnv(body.Env)) {
+    body.Cmd = body.Cmd || [];
+    if (body.Entrypoint) body.Cmd.shift(body.Entrypoint);
+    body.Entrypoint = WAIT_FOR_WEAVE_PATH;
+    if(!body.HostConfig.VolumesFrom){
+      body.HostConfig.VolumesFrom = [];
+    }
+    body.HostConfig.VolumesFrom.push(WAIT_FOR_WEAVE_VOLUME);
+    req.ModifiedClientRequest = {
+      Method: req.ClientRequest.Method,
+      Request: req.ClientRequest.Request,
+      Body: JSON.stringify(body)
+    };
+    return callback(null, req);
   }
-  req.Body.HostConfig.VolumesFrom.push(WAIT_FOR_WEAVE_VOLUME);
-  callback(null, 200, req);
+  else return callback(null);
 }
