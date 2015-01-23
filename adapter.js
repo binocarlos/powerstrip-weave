@@ -33,6 +33,17 @@ module.exports = function(opts){
         
       */
       createHandler(req.ClientRequest, getImageData, function(err, ModifiedRequest){
+
+        
+        /*
+        
+          ensure that the response to powerstrip is the Body as a string
+          
+        */
+        if(ModifiedRequest.Body && typeof(ModifiedRequest.Body)!='string'){
+          ModifiedRequest.Body = JSON.stringify(ModifiedRequest.Body)
+        }
+
         callback(err, {
           PowerstripProtocolVersion: 1,
           ModifiedClientRequest: ModifiedRequest
@@ -51,6 +62,16 @@ module.exports = function(opts){
         
       */
       startHandler(req.ClientRequest, function(err){
+
+        /*
+        
+          ensure that the response to powerstrip is the Body as a string
+          
+        */
+        if(req.ServerResponse.Body && typeof(req.ServerResponse.Body)!='string'){
+          req.ServerResponse.Body = JSON.stringify(req.ServerResponse.Body)
+        }
+
         callback(err, {
           PowerstripProtocolVersion: 1,
           ModifiedServerResponse: req.ServerResponse
