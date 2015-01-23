@@ -1,5 +1,6 @@
 var create = require('./actions/create');
 var start = require('./actions/start');
+var dockerclient = require('./dockerclient')
 
 /*
 
@@ -23,13 +24,15 @@ module.exports = function(opts){
     type:'pre-hook',
     handler:function(req, callback){
 
+      var getImageData = opts.getImageData || dockerclient.image;
+
       /*
       
         modify the create packet to inject the --volumes-from
         and remap the entrypoint
         
       */
-      createHandler(req.ClientRequest, function(err, ModifiedRequest){
+      createHandler(req.ClientRequest, getImageData, function(err, ModifiedRequest){
         callback(err, {
           PowerstripProtocolVersion: 1,
           ModifiedClientRequest: ModifiedRequest
