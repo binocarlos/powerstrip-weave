@@ -8,62 +8,59 @@
   
 */
 var utils = require('../utils')
+var dockerclient = require('../dockerclient')
 
 const WAIT_FOR_WEAVE_PATH = '/home/weavewait/wait-for-weave';
 const WAIT_FOR_WEAVE_VOLUME = 'weavewait:ro';
 
-module.exports = function(req, callback){
+module.exports = function(req, fetchImageData, callback){
 
   req.Body = JSON.parse(req.Body)
-  var weaveCidr = utils.extractWeaveEnv(req.Body.Env)
 
-  if(weaveCidr){
+  /*
+  
+    first check to see if there is a WEAVE_CIDR env var
 
-    /*
+    if there is none then we dont need to mess with the create packet
     
-      convert entrypoint and cmd to arrays
-      
-    */
-    if(req.Body.Entrypoint){
-      req.Body.Entrypoint = typeof(req.Body.Entrypoint)=='string' ? [req.Body.Entrypoint] : req.Body.Entrypoint
-    }
-    else{
-      req.Body.Entrypoint = []
-    }
-    if(req.Body.Cmd){
-      req.Body.Cmd = typeof(req.Body.Cmd)=='string' ? [req.Body.Cmd] : req.Body.Cmd
-    }
-    else{
-      req.Body.Cmd = []
-    }
+  */
+  var weaveCidr = utils.extractWeaveEnv(req.Body.Env);
 
-    /*
-    
-      the new CMD which is the old entrypoint concatenated with the cmd
-      
-    */
-    var cmd = req.Body.Entrypoint.concat(req.Body.Cmd)
+  if(!weaveCidr){
+    return callback(null, req)
+  }
 
-    /*
+  var ImageName = req.Body.Image;
+
+  /*
+  
+    grab the image info so we can combine container and image
+    entrypoints / cmds
     
-      the new Entrypoint which is wait for weave
-      
-    */
+  */
+  fetchImageData(ImageName, function(err, ImageInfo){
+
+    if(err) return callback(err)
+
+    ImageInfo = typeof(ImageInfo)=='string' ? JSON.parse(ImageInfo) : ImageInfo
+
+    var ImageEntry = ImageInfo.Config.Entrypoint;
+    var ImageCmd = ImageInfo.Config.Cmd;
+    var ContainerEntry = req.Body.Entrypoint;
+    var ContainerCmd = req.Body.Cmd;
+
+    // remap entry point and change the cmd to a combo of image / container settings
     req.Body.Entrypoint = [WAIT_FOR_WEAVE_PATH];
+    req.Body.Cmd = utils.combineEntryPoints(ImageEntry, ContainerEntry, ImageCmd, ContainerCmd);
 
-    req.Body.Cmd = cmd;
-
-    /*
-    
-      inject the --volumes-from = weavewait
-      
-    */
+    // inject the --volumes-from = weavewait
     if(!req.Body.HostConfig.VolumesFrom){
       req.Body.HostConfig.VolumesFrom = [];
     }
-    req.Body.HostConfig.VolumesFrom.push(WAIT_FOR_WEAVE_VOLUME);
-  }
+
+    req.Body.HostConfig.VolumesFrom.push(WAIT_FOR_WEAVE_VOLUME);    
+    req.Body = JSON.stringify(req.Body)
+    callback(null, req);
+  })
   
-  req.Body = JSON.stringify(req.Body)
-  callback(null, req);
 }
