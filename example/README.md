@@ -3,7 +3,7 @@ debug-example
 
 Here is an run through example of getting the `powerstrip-weave` adapter to assign a weave IP address and then run the job.
 
-This is a very manial walk-through and is used to illustrate the way that the adapter works.  Things will be far more simple when the images are public and on the Docker hub.
+This is a very manual walk-through and is used to illustrate the way that the adapter works.  Things will be far simpler when the images are public and on the Docker hub.
 
 The reason for opening so many shell windows is so we can see the output of the various components.
 
@@ -52,6 +52,14 @@ Then we need to build the powerstrip-debug image (after a `git clone https://git
 ```bash
 $ cd /srv/projects/powerstrip-debug
 $ docker build -t binocarlos/powerstrip-debug .
+```
+
+##### wait-for-weave
+
+To ensure that the latest wait-for-weave image is on your machine:
+
+```bash
+$ docker pull binocarlos/wait-for-weave
 ```
 
 ## powerstrip-debug container
