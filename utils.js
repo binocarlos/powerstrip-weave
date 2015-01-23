@@ -1,3 +1,14 @@
+/*
+
+  turn strings into arrays or return null
+  
+*/
+function processArrayArg(arr){
+  if(typeof(arr)=='string') arr = [arr]
+  if(!arr) return null
+  return arr.length ? arr : null
+}
+
 module.exports = {
   /*
   
@@ -31,7 +42,26 @@ module.exports = {
     return weaveVars[0];
   },
 
+  /*
+  
+    grab the env array from the results of docker inspect $CONTAINERID
+    
+  */
   extractEnvFromInspectPacket:function(inspect){
     return inspect[0].Config.Env
+  },
+
+  /*
+  
+    return a single array representing the command that is a combo of the entry point and command
+
+    the containerEntry and containerCommand ovveride the imageEntry and imageCommand
+    
+  */
+  combineEntryPoints:function(imageEntry, containerEntry, imageCommand, containerCommand){
+    var entry = processArrayArg(containerEntry) || processArrayArg(imageEntry) || []
+    var command = processArrayArg(containerCommand) || processArrayArg(imageCommand) || []
+
+    return entry.concat(command)
   }
 }
