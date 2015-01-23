@@ -10,6 +10,18 @@ tape('extract a container id from a /containers/start request', function(t){
   t.end();
 })
 
+tape('extract the Env from an inspect packet', function(t){
+
+  var env = utils.extractEnvFromInspectPacket(inspect)
+
+  t.deepEquals(env, [
+    "WEAVE_CIDR=10.255.0.10/8",
+    "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+  ], 'the env has been extracted')
+
+  t.end();
+})
+
 tape('extract the WEAVE_CIDR env variable from a docker inspect packet', function(t){
 
   var cidr = utils.extractWeaveEnv(inspect[0].Config.Env);
