@@ -2,8 +2,14 @@ var tape = require('tape');
 var create = require('../actions/create.js');
 var packet = require('./fixtures/create.json');
 
-function getCreatePacket(){
-  return JSON.parse(JSON.stringify(packet));
+function getCreatePacket(includeWeaveENV){
+  var ret = JSON.parse(JSON.stringify(packet));
+
+  if(includeWeaveENV){
+    ret.Env = ["WEAVE_CIDR=10.255.0.10/8"];
+  }
+
+  return ret;
 }
 
 tape('Create should expose a single function', function(t){
@@ -11,12 +17,12 @@ tape('Create should expose a single function', function(t){
   t.end();
 })
 
-tape('inject --volumes-from=weavetools into a create packet', function(t){
+tape('inject --volumes-from=weavetools and remap entry point into a create packet', function(t){
 
   var req = {
     Method:'POST',
     Request:'/containers/create',
-    Body:getCreatePacket()
+    Body:getCreatePacket(true)
   }
 
   create(req, function(err, code, response){
@@ -27,4 +33,22 @@ tape('inject --volumes-from=weavetools into a create packet', function(t){
     t.end();
   })
 
+})
+
+tape('dont change create packet when there is no WEAVE_CIDR env', function(t){
+  var req = {
+    Method:'POST',
+    Request:'/containers/create',
+    Body:getCreatePacket()
+  }
+
+  var copyReq = JSON.parse(JSON.stringify(req))
+
+  create(req, function(err, code, response){
+    t.equal(code, 200, 'the create code is 200');
+    t.equal(copyReq.Body.Entrypoint, response.Body.Entrypoint, 'the entrypoint is unchanged')
+    t.equal(copyReq.Body.Cmd, response.Body.Cmd, 'the cmd is unchanged')
+    t.deepEqual(copyReq.Body.HostConfig.VolumesFrom, response.Body.HostConfig.VolumesFrom, 'the volumes from is unchanged')
+    t.end();
+  })
 })
