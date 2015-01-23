@@ -19,8 +19,8 @@ module.exports = {
     from the JSON response from `docker inspect 1234`
     
   */
-  extractWeaveEnv:function(packet){
-    var envVars = packet.Config.Env || [];
+  extractWeaveEnv:function(envVars){
+    envVars = envVars || []
 
     var weaveVars = envVars.filter(function(envVar){
       return envVar.indexOf('WEAVE_CIDR=')==0;
