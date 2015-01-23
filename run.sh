@@ -18,7 +18,7 @@ cmd-weave(){
 # we ensure there is a weavetools container with
 # wait-for-weave in a volume
 cmd-launch(){
-  docker run --name weavewait binocarlos/wait-for-weave
+  docker run --name weavewait -e "WAIT_FOR_WEAVE_QUIT=yes" binocarlos/wait-for-weave
   cmd-weave launch "$@"
   node /srv/app/index.js
 }
