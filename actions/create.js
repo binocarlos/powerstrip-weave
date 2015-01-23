@@ -18,9 +18,46 @@ module.exports = function(req, callback){
   var weaveCidr = utils.extractWeaveEnv(req.Body.Env)
 
   if(weaveCidr){
-    var cmd = [req.Body.Entrypoint, req.Body.Cmd].join(' ');
-    req.Body.Entrypoint = WAIT_FOR_WEAVE_PATH;
+
+    /*
+    
+      convert entrypoint and cmd to arrays
+      
+    */
+    if(req.Body.Entrypoint){
+      req.Body.Entrypoint = typeof(req.Body.Entrypoint)=='string' ? [req.Body.Entrypoint] : req.Body.Entrypoint
+    }
+    else{
+      req.Body.Entrypoint = []
+    }
+    if(req.Body.Cmd){
+      req.Body.Cmd = typeof(req.Body.Cmd)=='string' ? [req.Body.Cmd] : req.Body.Cmd
+    }
+    else{
+      req.Body.Cmd = []
+    }
+
+    /*
+    
+      the new CMD which is the old entrypoint concatenated with the cmd
+      
+    */
+    var cmd = req.Body.Entrypoint.concat(req.Body.Cmd)
+
+    /*
+    
+      the new Entrypoint which is wait for weave
+      
+    */
+    req.Body.Entrypoint = [WAIT_FOR_WEAVE_PATH];
+
     req.Body.Cmd = cmd;
+
+    /*
+    
+      inject the --volumes-from = weavewait
+      
+    */
     if(!req.Body.HostConfig.VolumesFrom){
       req.Body.HostConfig.VolumesFrom = [];
     }
