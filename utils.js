@@ -29,5 +29,9 @@ module.exports = {
     })
 
     return weaveVars[0];
+  },
+
+  extractEnvFromInspectPacket:function(inspect){
+    return inspect[0].Config.Env
   }
 }
