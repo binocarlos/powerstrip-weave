@@ -48,7 +48,7 @@ module.exports = {
     
   */
   extractEnvFromInspectPacket:function(inspect){
-    return inspect[0].Config.Env
+    return inspect.Config.Env
   },
 
   /*
