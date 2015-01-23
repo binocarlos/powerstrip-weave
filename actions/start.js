@@ -28,7 +28,8 @@ module.exports = function(req, callback){
     if(stderr) return callback(stderr.toString());
 
     var containerInfo = JSON.parse(stdout.toString());
-    var weaveCidr = utils.extractWeaveEnv(containerInfo);
+    var envVars = utils.extractEnvFromInspectPacket(containerInfo)
+    var weaveCidr = utils.extractWeaveEnv(envVars);
 
     // there is no WEAVE_CIDR environment variable so just return - no weave today
     if(!weaveCidr) return callback(null, req);
