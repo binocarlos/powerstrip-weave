@@ -46,8 +46,8 @@ tape('dont change create packet when there is no WEAVE_CIDR env', function(t){
 
   create(req, function(err, code, response){
     t.equal(code, 200, 'the create code is 200');
-    t.equal(copyReq.Body.Entrypoint, response.Body.Entrypoint, 'the entrypoint is unchanged')
-    t.equal(copyReq.Body.Cmd, response.Body.Cmd, 'the cmd is unchanged')
+    t.deepEqual(copyReq.Body.Entrypoint, response.Body.Entrypoint, 'the entrypoint is unchanged')
+    t.deepEqual(copyReq.Body.Cmd, response.Body.Cmd, 'the cmd is unchanged')
     t.deepEqual(copyReq.Body.HostConfig.VolumesFrom, response.Body.HostConfig.VolumesFrom, 'the volumes from is unchanged')
     t.end();
   })
