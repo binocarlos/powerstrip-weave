@@ -130,20 +130,20 @@ $ CID=$(sudo weave run 10.255.0.50/8 binocarlos/powerstrip-weave-example)
 $ docker logs $CID
 ```
 
-You should see that it has taken around 800 ms for the weave network to connect.
+You should see that it has taken around 500 -> 800 ms for the weave network to connect.
 
 ## run powerstrip-weave container
 
 Now we will direct our docker client to powerstrip:
 
 ```bash
-$ export DOCKER_HOST=127.0.0,1:2375
+$ export DOCKER_HOST=127.0.0.1:2375
 ```
 
 And will run the same example as above but via the vanilla docker client:
 
 ```bash
-$ CID=$(docker run -e "WEAVE_CIDR=10.255.0.51/8" -d binocarlos/echo)
+$ CID=$(docker run -e "WEAVE_CIDR=10.255.0.51/8" -d binocarlos/powerstrip-weave-example)
 $ docker logs $CID
 ```
 
@@ -159,10 +159,25 @@ Once we can pipe stdout from powerstrip - we will be able to run this in attache
 
 You can get the status of the weave deamon using this command:
 
+NOTE: run this via the normal docker server not powerstrip (until stdout is fixed)
+
 ```bash
 $ docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /usr/bin/docker:/usr/bin/docker \
     binocarlos/powerstrip-weave status
+```
+
+## shutdown
+
+To shutdown powerstrip-weave (including weave + wait-for-weave):
+
+NOTE: run this via the normal docker server not powerstrip (until stdout is fixed)
+
+```bash
+$ docker run --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /usr/bin/docker:/usr/bin/docker \
+    binocarlos/powerstrip-weave stop
 ```
 
