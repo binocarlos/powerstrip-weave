@@ -8,7 +8,7 @@ tape('the Adapter should expose a single function', function(t){
   t.end();
 })
 
-tape('the Adapter should not alter a GET request', function(t){
+tape('the Adapter should not alter a GET request pre-hook', function(t){
 
   var adapter = Adapter();
 
@@ -21,7 +21,7 @@ tape('the Adapter should not alter a GET request', function(t){
     }
   };
 
-  adapter(req, function(err, code, response){
+  adapter(req, function(err, response){
     t.error(err, 'there is no error');
     
     t.deepEqual(response, {
@@ -32,7 +32,6 @@ tape('the Adapter should not alter a GET request', function(t){
       }
     }, 'same packet for GET');
 
-    t.equal(code, 200, '200 status code for GET');
     t.end();
   })
 
@@ -40,14 +39,15 @@ tape('the Adapter should not alter a GET request', function(t){
 
 tape('the Adapter should route custom create and start handlers', function(t){
 
+  var seen = {}
   var adapter = Adapter({
     create:function(req, callback){
-      req.HasSeenCreate = 'yes';
+      seen.HasSeenCreate = 'yes';
       t.equal(req.Body.fruit, 'apples', 'request body has apples');
       callback(null, req);
     },
     start:function(req, callback){
-      req.HasSeenStart = 'yes';
+      seen.HasSeenStart = 'yes';
       t.equal(req.Body.fruit, 'oranges', 'request body has oranges');
       t.equal(req.Request, '/v1.16/containers/123/start', 'request url matches');
       callback(null, req);
@@ -75,10 +75,9 @@ tape('the Adapter should route custom create and start handlers', function(t){
         }
       }
 
-      adapter(req, function(err, code, response){
+      adapter(req, function(err, response){
         t.error(err, 'there is no error');
-        t.equal(code, 200, '200 status code for CREATE');
-        t.equal(response.ModifiedClientRequest.HasSeenCreate, 'yes', 'the /containers/create route was matched');
+        t.equal(seen.HasSeenCreate, 'yes', 'the /containers/create route was matched');
         next();
       })
     },
@@ -98,13 +97,15 @@ tape('the Adapter should route custom create and start handlers', function(t){
           Body:{
             fruit:'oranges'
           }
+        },
+        ServerResponse:{
+          apples:10
         }
       };
 
-      adapter(req, function(err, code, response){
+      adapter(req, function(err, response){
         t.error(err, 'there is no error');
-        t.equal(code, 200, '200 status code for START');
-        t.equal(response.ModifiedClientRequest.HasSeenStart, 'yes', 'the /containers/123/start route was matched');
+        t.equal(seen.HasSeenStart, 'yes', 'the /containers/123/start route was matched');
         next();
       })
     }

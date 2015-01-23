@@ -26,5 +26,5 @@ module.exports = function(req, callback){
     req.Body.HostConfig.VolumesFrom.push(WAIT_FOR_WEAVE_VOLUME);
   }
   
-  callback(null, 200, req);
+  callback(null, req);
 }

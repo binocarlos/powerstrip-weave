@@ -11,6 +11,8 @@ var async = require('async');
 var utils = require('../utils');
 var cp = require('child_process');
 
+const ADMIN_SCRIPT = '/srv/app/run.sh'
+
 module.exports = function(req, callback){
 
   var containerID = utils.extractStartID(req.Request);
@@ -21,7 +23,7 @@ module.exports = function(req, callback){
     instructions are inside the env regarding a weave CIDR address
     
   */
-  cp.exec("docker inspect " + containerID, function(err, stdout, stderr){
+  cp.exec('docker inspect ' + containerID, function(err, stdout, stderr){
     if(err) return callback(err);
     if(stderr) return callback(stderr.toString());
 
@@ -33,7 +35,7 @@ module.exports = function(req, callback){
 
     // we do this thing (right here, right now)
     // we are inside the container and so will use /srv/app/run.sh attach $cidr $containerid
-    cp.exec("/srv/app/run.sh attach " + weaveCidr + " " + containerID, function(err, stdout, stderr){
+    cp.exec(ADMIN_SCRIPT + ' attach ' + weaveCidr + ' ' + containerID, function(err, stdout, stderr){
       if(err) return callback(err);
       if(stderr) return callback(stderr.toString());
 

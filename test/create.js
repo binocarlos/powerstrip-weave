@@ -25,8 +25,7 @@ tape('inject --volumes-from=weavetools and remap entry point into a create packe
     Body:getCreatePacket(true)
   }
 
-  create(req, function(err, code, response){
-    t.equal(code, 200, 'the create code is 200');
+  create(req, function(err, response){
     t.deepEqual(response.Body.HostConfig.VolumesFrom, ["parent", "other:ro", "weavewait:ro"], 'weavetools in the volumes from');
     t.equal(response.Body.Cmd, 'ping -c 1 10.255.0.10', 'the entrypoint has been prepended to the cmd');
     t.equal(response.Body.Entrypoint, '/home/weavetools/wait-for-weave', 'the entrypoint has been set to wait-for-weave');
@@ -44,8 +43,7 @@ tape('dont change create packet when there is no WEAVE_CIDR env', function(t){
 
   var copyReq = JSON.parse(JSON.stringify(req))
 
-  create(req, function(err, code, response){
-    t.equal(code, 200, 'the create code is 200');
+  create(req, function(err, response){    
     t.deepEqual(copyReq.Body.Entrypoint, response.Body.Entrypoint, 'the entrypoint is unchanged')
     t.deepEqual(copyReq.Body.Cmd, response.Body.Cmd, 'the cmd is unchanged')
     t.deepEqual(copyReq.Body.HostConfig.VolumesFrom, response.Body.HostConfig.VolumesFrom, 'the volumes from is unchanged')

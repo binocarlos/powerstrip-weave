@@ -23,13 +23,17 @@ module.exports = function(opts){
         the /containers/create and /containers/:id/start handlers
         
       */
-      adapter(body, function(err, code, body){
-        res.statusCode = code;
-        if(code==200 && body){
-          res.headers['Content-type'] = 'application/json';
-          body = JSON.stringify(body);
+      adapter(body, function(err, body){
+        if(err){
+          res.statusCode = 500;
+          res.end(err);
         }
-        res.end(body);
+        else{
+          res.statusCode = 200;
+          res.setHeader('Content-type', 'application/json');
+          body = JSON.stringify(body);
+          res.end(body);
+        }
       })
     }))
   })
