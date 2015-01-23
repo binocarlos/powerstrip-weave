@@ -11,6 +11,7 @@ var async = require('async');
 var hyperquest = require('hyperquest');
 var utils = require('../utils');
 var cp = require('child_process');
+var dockerclient = require('../dockerclient');
 
 const ADMIN_SCRIPT = '/srv/app/run.sh'
 
@@ -24,11 +25,11 @@ module.exports = function(req, callback){
     instructions are inside the env regarding a weave CIDR address
     
   */
-  cp.exec('docker inspect ' + containerID, function(err, stdout, stderr){
+  dockerclient.container(containerID, function(err, body){
     if(err) return callback(err);
-    if(stderr) return callback(stderr.toString());
+    if(!body) return callback('no response for docker container: ' + containerID);
 
-    var containerInfo = JSON.parse(stdout.toString());
+    var containerInfo = JSON.parse(body.toString());
     var envVars = utils.extractEnvFromInspectPacket(containerInfo)
     var weaveCidr = utils.extractWeaveEnv(envVars);
 
