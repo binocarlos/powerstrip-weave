@@ -1,0 +1,80 @@
+{
+    "Architecture": "amd64",
+    "Author": "Kai Davenport <kaiyadavenport@gmail.com>",
+    "Checksum": "tarsum.dev+sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "Comment": "",
+    "Config": {
+        "AttachStderr": false,
+        "AttachStdin": false,
+        "AttachStdout": false,
+        "Cmd": null,
+        "CpuShares": 0,
+        "Cpuset": "",
+        "Domainname": "",
+        "Entrypoint": [
+            "bash",
+            "/srv/app/run.sh"
+        ],
+        "Env": [
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+        ],
+        "ExposedPorts": null,
+        "Hostname": "8c41fcbc2d07",
+        "Image": "d55bf9aef18a2f4f709f22f05b92ba4b0c49a1d98958317f9f3baf0c7903808f",
+        "MacAddress": "",
+        "Memory": 0,
+        "MemorySwap": 0,
+        "NetworkDisabled": false,
+        "OnBuild": [],
+        "OpenStdin": false,
+        "PortSpecs": null,
+        "StdinOnce": false,
+        "Tty": false,
+        "User": "",
+        "Volumes": null,
+        "WorkingDir": ""
+    },
+    "Container": "fd0c8d63a6bf68be7cfd38a45213fd1181d1bd952ce1fc5279f2b45733356911",
+    "ContainerConfig": {
+        "AttachStderr": false,
+        "AttachStdin": false,
+        "AttachStdout": false,
+        "Cmd": [
+            "/bin/sh",
+            "-c",
+            "#(nop) ENTRYPOINT [bash /srv/app/run.sh]"
+        ],
+        "CpuShares": 0,
+        "Cpuset": "",
+        "Domainname": "",
+        "Entrypoint": [
+            "bash",
+            "/srv/app/run.sh"
+        ],
+        "Env": [
+            "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+        ],
+        "ExposedPorts": null,
+        "Hostname": "8c41fcbc2d07",
+        "Image": "d55bf9aef18a2f4f709f22f05b92ba4b0c49a1d98958317f9f3baf0c7903808f",
+        "MacAddress": "",
+        "Memory": 0,
+        "MemorySwap": 0,
+        "NetworkDisabled": false,
+        "OnBuild": [],
+        "OpenStdin": false,
+        "PortSpecs": null,
+        "StdinOnce": false,
+        "Tty": false,
+        "User": "",
+        "Volumes": null,
+        "WorkingDir": ""
+    },
+    "Created": "2015-01-23T02:46:23.220587987Z",
+    "DockerVersion": "1.4.1",
+    "Id": "03b072a08a8d985fc62781761b0c6c2b07d9d9aa42f1d6e592f14d44b99327e4",
+    "Os": "linux",
+    "Parent": "d55bf9aef18a2f4f709f22f05b92ba4b0c49a1d98958317f9f3baf0c7903808f",
+    "Size": 0,
+    "VirtualSize": 192677508
+}
