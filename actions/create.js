@@ -14,6 +14,7 @@ const WAIT_FOR_WEAVE_VOLUME = 'weavewait:ro';
 
 module.exports = function(req, callback){
 
+  req.Body = JSON.parse(req.Body)
   var weaveCidr = utils.extractWeaveEnv(req.Body.Env)
 
   if(weaveCidr){
@@ -26,5 +27,6 @@ module.exports = function(req, callback){
     req.Body.HostConfig.VolumesFrom.push(WAIT_FOR_WEAVE_VOLUME);
   }
   
+  req.Body = JSON.stringify(req.Body)
   callback(null, req);
 }

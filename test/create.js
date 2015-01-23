@@ -9,7 +9,7 @@ function getCreatePacket(includeWeaveENV){
     ret.Env = ["WEAVE_CIDR=10.255.0.10/8"];
   }
 
-  return ret;
+  return JSON.stringify(ret);
 }
 
 tape('Create should expose a single function', function(t){
@@ -26,9 +26,11 @@ tape('inject --volumes-from=weavetools and remap entry point into a create packe
   }
 
   create(req, function(err, response){
-    t.deepEqual(response.Body.HostConfig.VolumesFrom, ["parent", "other:ro", "weavewait:ro"], 'weavetools in the volumes from');
-    t.equal(response.Body.Cmd, 'ping -c 1 10.255.0.10', 'the entrypoint has been prepended to the cmd');
-    t.equal(response.Body.Entrypoint, '/home/weavewait/wait-for-weave', 'the entrypoint has been set to wait-for-weave');
+
+    var responseBody = JSON.parse(response.Body)
+    t.deepEqual(responseBody.HostConfig.VolumesFrom, ["parent", "other:ro", "weavewait:ro"], 'weavetools in the volumes from');
+    t.equal(responseBody.Cmd, 'ping -c 1 10.255.0.10', 'the entrypoint has been prepended to the cmd');
+    t.equal(responseBody.Entrypoint, '/home/weavewait/wait-for-weave', 'the entrypoint has been set to wait-for-weave');
     t.end();
   })
 
@@ -42,11 +44,14 @@ tape('dont change create packet when there is no WEAVE_CIDR env', function(t){
   }
 
   var copyReq = JSON.parse(JSON.stringify(req))
+  var copyReqBody = JSON.parse(copyReq.Body)
 
-  create(req, function(err, response){    
-    t.deepEqual(copyReq.Body.Entrypoint, response.Body.Entrypoint, 'the entrypoint is unchanged')
-    t.deepEqual(copyReq.Body.Cmd, response.Body.Cmd, 'the cmd is unchanged')
-    t.deepEqual(copyReq.Body.HostConfig.VolumesFrom, response.Body.HostConfig.VolumesFrom, 'the volumes from is unchanged')
+  create(req, function(err, response){
+    var responseBody = JSON.parse(response.Body)
+    
+    t.deepEqual(copyReqBody.Entrypoint, responseBody.Entrypoint, 'the entrypoint is unchanged')
+    t.deepEqual(copyReqBody.Cmd, responseBody.Cmd, 'the cmd is unchanged')
+    t.deepEqual(copyReqBody.HostConfig.VolumesFrom, responseBody.HostConfig.VolumesFrom, 'the volumes from is unchanged')
     t.end();
   })
 })
