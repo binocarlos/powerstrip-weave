@@ -8,6 +8,7 @@
 */
 
 var async = require('async');
+var hyperquest = require('hyperquest');
 var utils = require('../utils');
 var cp = require('child_process');
 
