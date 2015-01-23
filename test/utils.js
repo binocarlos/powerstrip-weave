@@ -12,7 +12,7 @@ tape('extract a container id from a /containers/start request', function(t){
 
 tape('extract the Env from an inspect packet', function(t){
 
-  var env = utils.extractEnvFromInspectPacket(inspect)
+  var env = utils.extractEnvFromInspectPacket(inspect[0])
 
   t.deepEquals(env, [
     "WEAVE_CIDR=10.255.0.10/8",
