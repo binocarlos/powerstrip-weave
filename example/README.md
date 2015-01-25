@@ -36,6 +36,8 @@ $ docker run -ti --rm \
     binocarlos/powerstrip-debug
 ```
 
+We run this container with a `-ti` flag and not `-d` because then we can watch its stdout as requests go through.
+
 ## powerstrip-weave container
 
 The powerstrip-weave adapter will hijack the entry point of any container that has been given a `WEAVE_CIDR` environment variable.
@@ -43,7 +45,7 @@ The powerstrip-weave adapter will hijack the entry point of any container that h
 In another terminal window:
 
 ```bash
-$ docker run -ti --rm \
+$ docker run -d \
     --name powerstrip-weave \
     --expose 80 \
     -v /var/run/docker.sock:/var/run/docker.sock \
@@ -60,7 +62,7 @@ Notice how we are linking to the `powerstrip-weave` and the `powerstrip-debug` c
 In another terminal window:
 
 ```bash
-$ docker run -ti --rm \
+$ docker run -d \
     --name powerstrip \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v ~/powerstrip-demo/adapters.yml:/etc/powerstrip/adapters.yml \
@@ -81,9 +83,9 @@ In another (final) terminal window:
 The first example is running the `powerstrip-weave-example` container via weave normally.
 
 ```bash
-$ CID=$(sudo weave run 10.255.0.50/8 binocarlos/powerstrip-weave-example hello world) && \
-    docker logs $CID && \
-    docker rm $CID
+$ CID=$(sudo weave run 10.255.0.50/8 binocarlos/powerstrip-weave-example hello world)
+$ docker logs $CID
+$ docker rm $CID
 ```
 
 You should see that it has taken around 500 -> 800 ms for the weave network to connect.
@@ -103,9 +105,9 @@ $ export DOCKER_HOST=127.0.0.1:2375
 Finally we run a container that is modified by the powerstrip-weave adapter like so:
 
 ```bash
-$ CID=$(docker run -e "WEAVE_CIDR=10.255.0.51/8" -d binocarlos/powerstrip-weave-example hello world) && \
-    docker logs $CID && \
-    docker rm $CID
+$ CID=$(docker run -e "WEAVE_CIDR=10.255.0.51/8" -d binocarlos/powerstrip-weave-example hello world)
+$ docker logs $CID
+$ docker rm $CID
 ```
 
 It should report that it has taken 0 ms for the weave network to connect.
