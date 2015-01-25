@@ -1,3 +1,7 @@
+var cp = require('child_process');
+
+const ADMIN_SCRIPT = '/srv/app/run.sh';
+
 /*
 
   turn strings into arrays or return null
@@ -63,5 +67,23 @@ module.exports = {
     var command = processArrayArg(containerCommand) || processArrayArg(imageCommand) || []
 
     return entry.concat(command)
+  },
+
+  /*
+  
+    execute the `weave attach $CIDR $CONTAINER` command
+    
+  */
+  runWeaveAttach:function(weaveCidr, containerID, callback){
+
+    // we are inside the container and so will use /srv/app/run.sh attach $cidr $containerid
+    cp.exec(ADMIN_SCRIPT + ' attach ' + weaveCidr + ' ' + containerID, function(err, stdout, stderr){
+      if(err) return callback(err);
+      if(stderr) return callback(stderr.toString());
+
+      // the network should be attaching itself and the wait-for-weave doing its thing!
+      callback();
+    })
   }
+
 }
