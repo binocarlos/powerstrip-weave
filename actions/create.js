@@ -13,7 +13,9 @@ var dockerclient = require('../dockerclient')
 const WAIT_FOR_WEAVE_PATH = '/home/weavewait/wait-for-weave';
 const WAIT_FOR_WEAVE_VOLUME = 'weavewait:ro';
 
-module.exports = function(req, fetchImageData, callback){
+module.exports = function(req, api, callback){
+
+  var fetchImageData = api.fetchImageData;
 
   req.Body = JSON.parse(req.Body)
 

@@ -6,17 +6,19 @@
    * calling weave to setup the network using the container id
   
 */
-
-var async = require('async');
 var hyperquest = require('hyperquest');
 var utils = require('../utils');
-var cp = require('child_process');
+
 var dockerclient = require('../dockerclient');
 
-const ADMIN_SCRIPT = '/srv/app/run.sh'
 
-module.exports = function(req, callback){
 
+module.exports = function(req, api, callback){
+
+  var getContainerData = api.getContainerData;
+  var runWeaveAttach = api.runWeaveAttach;
+
+  
   var containerID = utils.extractStartID(req.Request);
 
   /*
@@ -25,7 +27,7 @@ module.exports = function(req, callback){
     instructions are inside the env regarding a weave CIDR address
     
   */
-  dockerclient.container(containerID, function(err, body){
+  getContainerData(containerID, function(err, body){
     if(err) return callback(err);
     if(!body) return callback('no response for docker container: ' + containerID);
 
@@ -36,11 +38,9 @@ module.exports = function(req, callback){
     // there is no WEAVE_CIDR environment variable so just return - no weave today
     if(!weaveCidr) return callback(null, req);
 
-    // we are inside the container and so will use /srv/app/run.sh attach $cidr $containerid
-    cp.exec(ADMIN_SCRIPT + ' attach ' + weaveCidr + ' ' + containerID, function(err, stdout, stderr){
+    // tell weave to attach the CIDR to the containerID
+    runWeaveAttach(weaveCidr, containerID, function(err){
       if(err) return callback(err);
-      if(stderr) return callback(stderr.toString());
-
       // the network should be attaching itself and the wait-for-weave doing its thing!
       callback(null, req);
     })
