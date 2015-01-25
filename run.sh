@@ -4,6 +4,9 @@ cmd-weave-cli(){
   /usr/local/bin/weave "$@"
 }
 
+# proxy back into this container using the docker client
+# although cumbersome - this avoids issues like running --net=host and --links
+# in the same container which docker does not like
 cmd-weave(){
   docker run --rm \
     --net=host \
@@ -17,6 +20,11 @@ cmd-weave(){
 
 # we ensure there is a weavetools container with
 # wait-for-weave in a volume
+#
+# WAIT_FOR_WEAVE_QUIT tells the wait-for-weave binary to quit immediately
+# this is for when we just want to volume to be mounted and not for
+# anything to actually run
+#
 cmd-launch(){
   docker run --name weavewait -e "WAIT_FOR_WEAVE_QUIT=yes" binocarlos/wait-for-weave
   cmd-weave launch "$@"
