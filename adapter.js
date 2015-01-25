@@ -1,5 +1,6 @@
 var create = require('./actions/create');
 var start = require('./actions/start');
+var responder = require('./responder');
 var dockerclient = require('./dockerclient')
 
 /*
@@ -15,81 +16,59 @@ module.exports = function(opts){
 
   opts = opts || {};
 
-  var createHandler = opts.create || create
-  var startHandler = opts.start || start
+  // the two handlers for create & start actions
+  // overriden for the unit tests
+  var createHandler = opts.create || create;
+  var startHandler = opts.start || start;
+  // a do nothing handler for all other requests
+  var noopHandler = function(req, callback){
+    callback(null, req)
+  }
+
+  // the function used to fetch image data - overridden for the unit tests
+  var getImageData = opts.getImageData || dockerclient.image;
 
   var routes = [{
     method:'POST',
     url:/\/[\w\.]+\/containers\/create$/,
     type:'pre-hook',
-    handler:function(req, callback){
-
-      var getImageData = opts.getImageData || dockerclient.image;
-
-      /*
+    /*
+    
+      CREATE action
+      pass the ClientRequest so the action ignores the powerstrip layer of the JSON packet
+      the create action changes the ClientRequest and so we re-assign the modified ClientRequest
       
-        modify the create packet to inject the --volumes-from
-        and remap the entrypoint
-        
-      */
+    */
+    handler:function(req, callback){
       createHandler(req.ClientRequest, getImageData, function(err, ModifiedRequest){
-
-        
-        /*
-        
-          ensure that the response to powerstrip is the Body as a string
-          
-        */
-        if(ModifiedRequest.Body && typeof(ModifiedRequest.Body)!='string'){
-          ModifiedRequest.Body = JSON.stringify(ModifiedRequest.Body)
-        }
-
-        callback(err, {
-          PowerstripProtocolVersion: 1,
-          ModifiedClientRequest: ModifiedRequest
-        })
+        if(err) return callback(err)
+        req.ClientRequest = ModifiedRequest;
+        callback(null, req);
       })
     }
   },{
     method:'POST',
     url:/\/[\w\.]+\/containers\/\w+\/start/,
     type:'post-hook',
-    handler:function(req, callback){
-
-      /*
+    /*
+    
+      START action
+      pass the ClientRequest so the action ignores the powerstrip layer of the JSON packet
+      the start action does not change anything it just reads the container id and ENV 
       
-        tell weave to assign an IP based on the WEAVE_CIDR env
-        
-      */
+    */
+    handler:function(req, callback){
       startHandler(req.ClientRequest, function(err){
-
-        /*
-        
-          ensure that the response to powerstrip is the Body as a string
-          
-        */
-        if(req.ServerResponse.Body && typeof(req.ServerResponse.Body)!='string'){
-          req.ServerResponse.Body = JSON.stringify(req.ServerResponse.Body)
-        }
-
-        callback(err, {
-          PowerstripProtocolVersion: 1,
-          ModifiedServerResponse: req.ServerResponse
-        })
+        if(err) return callback(err)
+        callback(null, req)
       })
     }
   }];
 
   return function(req, callback){
-    /*
-    
-      handler is a function that will modify the request somehow
 
-      if no handler is found then we return the request unmolested
-      
-    */
+    // loop over the registered routes to find a handler for this request
     var handler;
-
     routes.forEach(function(route){
       if(handler) return;
       var url = req.ClientRequest.Request || '';
@@ -98,26 +77,14 @@ module.exports = function(opts){
       }
     })
 
-    if(handler){
-      handler(req, callback);
-    }
-    else{
-      if(req.Type=='pre-hook'){
-        callback(null, {
-          PowerstripProtocolVersion: 1,
-          ModifiedClientRequest: req.ClientRequest
-        })
-      }
-      else if(req.Type=='post-hook'){
-        callback(null, {
-          PowerstripProtocolVersion: 1,
-          ModifiedServerResponse: req.ServerResponse
-        })
-      }
-      else{
-        callback('no handler found');
-      }
-      
-    }
+    // if no handler is found then we return the request unmolested
+    handler = handler || noopHandler;
+
+    handler(req, function(err, req){
+      if(err) return callback(err);
+
+      // pass off to the responder which knows how to format the powerstrip response body
+      responder(req, callback)
+    })
   }
 }
