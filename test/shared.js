@@ -35,12 +35,12 @@ function runWeaveAttach(cidr, containerID, done){
 }
 
 function getPrehook(){
-  var ret = JSON.parse(JSON.stringify(prehook));
+  var ret = JSON.stringify(prehook);
   return ret;
 }
 
 function getPosthook(){
-  var ret = JSON.parse(JSON.stringify(posthook));
+  var ret = JSON.stringify(posthook);
   return ret;
 }
 
