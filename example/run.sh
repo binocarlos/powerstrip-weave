@@ -15,7 +15,8 @@ function tickcounter() {
 function quitcounter() {
   let ms=$counter*100
   echo "Network did not connect after $ms ms";
-  ifconfig;  
+  ifconfig;
+  exit 1;
 }
 
 function finishcounter() {
