@@ -93,10 +93,14 @@ In another (final) terminal window:
 The first example is running the `powerstrip-weave-example` container via weave normally.
 
 ```bash
-$ CID=$(sudo weave run 10.255.0.50/8 binocarlos/powerstrip-weave-example) && docker logs $CID
+$ CID=$(sudo weave run 10.255.0.50/8 binocarlos/powerstrip-weave-example hello world) && \
+    docker logs $CID && \
+    docker rm $CID
 ```
 
 You should see that it has taken around 500 -> 800 ms for the weave network to connect.
+
+The output of `ifconfig` should show the `ethwe` adapter having an IP address of `10.255.0.50`
 
 ## redirect the docker client
 
@@ -111,11 +115,66 @@ $ export DOCKER_HOST=127.0.0.1:2375
 Finally we run a container that is modified by the powerstrip-weave adapter like so:
 
 ```bash
-$ CID=$(docker run -e "WEAVE_CIDR=10.255.0.51/8" -d binocarlos/powerstrip-weave-example)
-$ docker logs $CID
+$ CID=$(docker run -e "WEAVE_CIDR=10.255.0.51/8" -d binocarlos/powerstrip-weave-example hello world) && \
+    docker logs $CID && \
+    docker rm $CID
 ```
 
-It should report that it has taken 0 ms for the weave network to connect.  This is because the entrypoint has been hijacked and remapped to `wait-for-weave` which has paused until the weave network has connected.
+It should report that it has taken 0 ms for the weave network to connect.
+
+The output of `ifconfig` should show the `ethwe` adapter having an IP address of `10.255.0.51`
+
+This is because the entrypoint has been hijacked and remapped to `wait-for-weave` which has paused until the weave network has connected.
+
+The terminal window showing the output of the `powerstrip-debug` container will show that the request BEFORE and AFTER powerstrip-weave modified the /containers/create request.
+
+You can see the different in the key fields here:
+
+Before:
+
+```json
+{
+    "Entrypoint":null,
+    "Cmd":[
+        "hello",
+        "world"
+    ],
+    "HostConfig":{
+       "VolumesFrom":null 
+    },
+    "Env": [
+        "WEAVE_CIDR=10.255.0.51/8"
+    ]
+}
+```
+
+After:
+
+```json
+{
+    "Entrypoint": [
+        "/home/weavewait/wait-for-weave"
+    ]
+    "Cmd":[
+        "bash",
+        "/srv/app/run.sh",
+        "hello",
+        "world"
+    ],
+    "HostConfig":{
+        "VolumesFrom":[
+            "weavewait:ro"
+        ] 
+    },
+    "Env": [
+        "WEAVE_CIDR=10.255.0.51/8"
+    ]
+}
+```
+
+They key thing to note is that powerstrip-weave has grabbed the original `Entrypoint` from the image and prepended it onto the `Cmd` of the container.  It has then hijacked the `Entrypoint` to point at the `wait-for-weave` volume that has been mounted in `VolumesFrom`.
+
+The effect this has is to eventually run the originally intended entrypoint but only AFTER the weave network has been connected.
 
 ## shutdown
 
