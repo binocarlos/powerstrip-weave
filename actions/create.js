@@ -15,7 +15,7 @@ const WAIT_FOR_WEAVE_VOLUME = 'weavewait:ro';
 
 module.exports = function(req, api, callback){
 
-  var fetchImageData = api.fetchImageData;
+  var getImageData = api.getImageData;
 
   req.Body = JSON.parse(req.Body)
 
@@ -40,11 +40,11 @@ module.exports = function(req, api, callback){
     entrypoints / cmds
     
   */
-  fetchImageData(ImageName, function(err, ImageInfo){
+  getImageData(ImageName, function(err, body){
 
     if(err) return callback(err)
 
-    ImageInfo = typeof(ImageInfo)=='string' ? JSON.parse(ImageInfo) : ImageInfo
+    var ImageInfo = JSON.parse(body);
 
     var ImageEntry = ImageInfo.Config.Entrypoint;
     var ImageCmd = ImageInfo.Config.Cmd;

@@ -1,6 +1,8 @@
 var tape = require('tape');
 var async = require('async');
 var Adapter = require('../adapter.js');
+var testutils = require('./shared.js');
+
 var imagedata = require('./fixtures/image.json');
 
 tape('the Adapter should expose a single function', function(t){
@@ -11,9 +13,7 @@ tape('the Adapter should expose a single function', function(t){
 tape('the Adapter should not alter a GET request pre-hook', function(t){
 
   var adapter = Adapter({
-    getImageData:function(imageName, done){
-      done(null, imagedata)
-    }
+    getImageData:testutils.getImageData
   });
 
   var req = {
@@ -37,7 +37,7 @@ tape('the Adapter should not alter a GET request pre-hook', function(t){
     }, 'same packet for GET');
 
     t.end();
-  })
+  });
 
 })
 
@@ -45,17 +45,15 @@ tape('the Adapter should route custom create and start handlers', function(t){
 
   var seen = {}
   var adapter = Adapter({
-    getImageData:function(imageName, done){
-      done(null, imagedata)
-    },
+    getImageData:testutils.getImageData,
     create:function(req, api, callback){
       seen.HasSeenCreate = 'yes';
-      t.equal(req.Body.fruit, 'apples', 'request body has apples');
+      t.equal(JSON.parse(req.Body).fruit, 'apples', 'request body has apples');
       callback(null, req);
     },
     start:function(req, api, callback){
       seen.HasSeenStart = 'yes';
-      t.equal(req.Body.fruit, 'oranges', 'request body has oranges');
+      t.equal(JSON.parse(req.Body).fruit, 'oranges', 'request body has oranges');
       t.equal(req.Request, '/v1.16/containers/123/start', 'request url matches');
       callback(null, req);
     }
@@ -76,9 +74,9 @@ tape('the Adapter should route custom create and start handlers', function(t){
         ClientRequest: {
           Method:'POST',
           Request:'/v1.16/containers/create',
-          Body:{
+          Body:JSON.stringify({
             fruit:'apples'
-          }
+          })
         }
       }
 
@@ -101,13 +99,13 @@ tape('the Adapter should route custom create and start handlers', function(t){
         ClientRequest: {
           Method:'POST',
           Request:'/v1.16/containers/123/start',
-          Body:{
+          Body:JSON.stringify({
             fruit:'oranges'
-          }
+          })
         },
-        ServerResponse:{
+        ServerResponse:JSON.stringify({
           apples:10
-        }
+        })
       };
 
       adapter(req, function(err, response){
