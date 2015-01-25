@@ -20,7 +20,7 @@ tape('inject --volumes-from=weavetools and remap entry point into a create packe
     getImageData:testutils.getImageData
   }, function(err, response){
 
-    var responseBody = JSON.parse(response.Body)
+    var responseBody = JSON.parse(response.Body);
     t.deepEqual(responseBody.HostConfig.VolumesFrom, ["parent", "other:ro", "weavewait:ro"], 'weavetools in the volumes from');
     t.deepEqual(responseBody.Cmd, ['ping', '-c 1 10.255.0.10'], 'the entrypoint has been prepended to the cmd');
     t.deepEqual(responseBody.Entrypoint, ['/home/weavewait/wait-for-weave'], 'the entrypoint has been set to wait-for-weave');
