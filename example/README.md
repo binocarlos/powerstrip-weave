@@ -3,18 +3,6 @@ debug-example
 
 Here is an run through example of getting the `powerstrip-weave` adapter to assign a weave IP address via the vanilla docker client and blocking until the network is connected.
 
-## pull images
-
-To make the example run smoother - first pull images:
-
-```bash
-$ docker pull clusterhq/powerstrip:latest
-$ docker pull binocarlos/powerstrip-weave:latest
-$ docker pull binocarlos/powerstrip-weave-example:latest
-$ docker pull binocarlos/powerstrip-debug:latest
-$ docker pull binocarlos/wait-for-weave:latest
-```
-
 ## adapters.yml
 
 The adapters.yml controls which adapters that powerstrip will hook into.
