@@ -1,0 +1,9 @@
+{
+    "Type": "pre-hook",
+    "PowerstripProtocolVersion": 1,
+    "ClientRequest": {
+        "Body": "{\"Hostname\":\"\",\"Domainname\":\"\",\"User\":\"\",\"Memory\":0,\"MemorySwap\":0,\"CpuShares\":0,\"Cpuset\":\"\",\"AttachStdin\":false,\"AttachStdout\":false,\"AttachStderr\":false,\"PortSpecs\":null,\"ExposedPorts\":{},\"Tty\":false,\"OpenStdin\":false,\"StdinOnce\":false,\"Env\":[\"WEAVE_CIDR=10.255.0.51/8\"],\"Cmd\":[\"hello\",\"world\"],\"Image\":\"binocarlos/powerstrip-weave-example\",\"Volumes\":{},\"WorkingDir\":\"\",\"Entrypoint\":null,\"NetworkDisabled\":false,\"MacAddress\":\"\",\"OnBuild\":null,\"HostConfig\":{\"Binds\":null,\"ContainerIDFile\":\"\",\"LxcConf\":[],\"Privileged\":false,\"PortBindings\":{},\"Links\":null,\"PublishAllPorts\":false,\"Dns\":null,\"DnsSearch\":null,\"ExtraHosts\":null,\"VolumesFrom\":null,\"Devices\":[],\"NetworkMode\":\"bridge\",\"IpcMode\":\"\",\"CapAdd\":null,\"CapDrop\":null,\"RestartPolicy\":{\"Name\":\"\",\"MaximumRetryCount\":0},\"SecurityOpt\":null}}",
+        "Request": "/v1.16/containers/create",
+        "Method": "POST"
+    }
+}

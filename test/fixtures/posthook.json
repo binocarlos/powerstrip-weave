@@ -1,0 +1,14 @@
+{
+    "Type": "post-hook",
+    "PowerstripProtocolVersion": 1,
+    "ClientRequest": {
+        "Body": null,
+        "Request": "/v1.16/containers/0d1e5cf32c5ec5cb7d205292552ee7d92a862387bfbc63c8c02fd93795b4fdd0/start",
+        "Method": "POST"
+    },
+    "ServerResponse": {
+        "Body": "",
+        "Code": 204,
+        "ContentType": null
+    }
+}
