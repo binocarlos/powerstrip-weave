@@ -36,7 +36,6 @@ module.exports = function(req, callback){
     // there is no WEAVE_CIDR environment variable so just return - no weave today
     if(!weaveCidr) return callback(null, req);
 
-    // we do this thing (right here, right now)
     // we are inside the container and so will use /srv/app/run.sh attach $cidr $containerid
     cp.exec(ADMIN_SCRIPT + ' attach ' + weaveCidr + ' ' + containerID, function(err, stdout, stderr){
       if(err) return callback(err);
