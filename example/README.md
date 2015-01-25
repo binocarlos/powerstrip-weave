@@ -19,7 +19,7 @@ $ docker pull binocarlos/wait-for-weave:latest
 
 The adapters.yml controls which adapters that powerstrip will hook into.
 
-In this example, we pipe from the debug -> weave -> debug adapters so we can see the effect that weave has on the requests.
+In this example, we pipe from the debug -> weave -> debug adapters so we can see the effect that the weave adapter has on the requests.
 
 ```bash
 $ cat > ~/powerstrip-demo/adapters.yml <<EOF
