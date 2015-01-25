@@ -93,8 +93,7 @@ In another (final) terminal window:
 The first example is running the `powerstrip-weave-example` container via weave normally.
 
 ```bash
-$ CID=$(sudo weave run 10.255.0.50/8 binocarlos/powerstrip-weave-example)
-$ docker logs $CID
+$ CID=$(sudo weave run 10.255.0.50/8 binocarlos/powerstrip-weave-example) && docker logs $CID
 ```
 
 You should see that it has taken around 500 -> 800 ms for the weave network to connect.
@@ -117,3 +116,14 @@ $ docker logs $CID
 ```
 
 It should report that it has taken 0 ms for the weave network to connect.  This is because the entrypoint has been hijacked and remapped to `wait-for-weave` which has paused until the weave network has connected.
+
+## shutdown
+
+To shutdown cleanly (i.e. stop weave and remove the wait-for-weave volume):
+
+```bash
+$ docker run --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /usr/bin/docker:/usr/bin/docker \
+    binocarlos/powerstrip-weave stop
+```
