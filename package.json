@@ -14,11 +14,11 @@
   "license": "MIT",
   "dependencies": {
     "concat-stream": "^1.4.7",
-    "hyperquest": "^1.0.1",
     "minimist": "^1.1.0"
   },
   "devDependencies": {
     "async": "^0.9.0",
-    "tape": "^3.4.0"
+    "tape": "^3.4.0",
+    "hyperquest": "^1.0.1"
   }
 }
