@@ -1,4 +1,4 @@
-[{
+{
     "AppArmorProfile": "",
     "Args": [
         "hello"
@@ -93,4 +93,3 @@
     "Volumes": {},
     "VolumesRW": {}
 }
-]

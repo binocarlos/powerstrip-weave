@@ -12,7 +12,7 @@ tape('extract a container id from a /containers/start request', function(t){
 
 tape('extract the Env from an inspect packet', function(t){
 
-  var env = utils.extractEnvFromInspectPacket(inspect[0])
+  var env = utils.extractEnvFromInspectPacket(inspect)
 
   t.deepEquals(env, [
     "WEAVE_CIDR=10.255.0.10/8",
@@ -24,7 +24,7 @@ tape('extract the Env from an inspect packet', function(t){
 
 tape('extract the WEAVE_CIDR env variable from a docker inspect packet', function(t){
 
-  var cidr = utils.extractWeaveEnv(inspect[0].Config.Env);
+  var cidr = utils.extractWeaveEnv(inspect.Config.Env);
 
   t.equal(cidr, '10.255.0.10/8');
   t.end();
