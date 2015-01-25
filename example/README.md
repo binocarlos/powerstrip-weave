@@ -116,6 +116,8 @@ The output of `ifconfig` should show the `ethwe` adapter having an IP address of
 
 This is because the entrypoint has been hijacked and remapped to `wait-for-weave` which has paused until the weave network has connected.
 
+## inspect powerstrip-debug output
+
 The terminal window showing the output of the `powerstrip-debug` container will show that the request BEFORE and AFTER powerstrip-weave modified the /containers/create request.
 
 You can see the different in the key fields here:
