@@ -88,14 +88,13 @@ module.exports = function(opts){
       if no handler is found then we return the request unmolested
       
     */
-    var handler, responder;
+    var handler;
 
     routes.forEach(function(route){
       if(handler) return;
       var url = req.ClientRequest.Request || '';
       if(route.method==req.ClientRequest.Method && route.type==req.Type && url.match(route.url)){
         handler = route.handler;
-        responder = route.responder;
       }
     })
 
