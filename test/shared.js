@@ -1,6 +1,8 @@
 var createdata = require('./fixtures/create.json');
 var imagedata = require('./fixtures/image.json');
 var containerdata = require('./fixtures/inspect.json');
+var prehook = require('./fixtures/prehook.json');
+var posthook = require('./fixtures/posthook.json');
 
 // factory for a create packet
 function getCreatePacket(includeWeaveENV, removeEntryPoint){
@@ -19,22 +21,34 @@ function getCreatePacket(includeWeaveENV, removeEntryPoint){
 
 
 // stub so we dont need docker
-var getImageData = function(imageName, done){
+function getImageData(imageName, done){
   done(null, JSON.stringify(imagedata))
 }
 
 // stub so we dont need docker
-var getContainerData = function(containerID, done){
+function getContainerData(containerID, done){
   done(null, JSON.stringify(containerdata))
 }
 
-var runWeaveAttach = function(cidr, containerID, done){
+function runWeaveAttach(cidr, containerID, done){
   done()
+}
+
+function getPrehook(){
+  var ret = JSON.parse(JSON.stringify(prehook));
+  return ret;
+}
+
+function getPosthook(){
+  var ret = JSON.parse(JSON.stringify(posthook));
+  return ret;
 }
 
 module.exports = {
   getImageData:getImageData,
   getCreatePacket:getCreatePacket,
   getContainerData:getContainerData,
+  getPreHook:getPrehook,
+  getPostHook:getPosthook,
   runWeaveAttach:runWeaveAttach
 }
