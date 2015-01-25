@@ -2,6 +2,7 @@ var create = require('./actions/create');
 var start = require('./actions/start');
 var responder = require('./responder');
 var dockerclient = require('./dockerclient')
+var utils = require('./utils')
 
 /*
 
@@ -28,6 +29,13 @@ module.exports = function(opts){
   // the function used to fetch image data - overridden for the unit tests
   var getImageData = opts.getImageData || dockerclient.image;
 
+  // the function used to fetch container data - overridden for the unit tests
+  var getContainerData = opts.getContainerData || dockerclient.container;
+
+  // the function used to ask weave to attach a container to a CIDR - overriden for the unit tests
+  var runWeaveAttach = opts.runWeaveAttach || utils.runWeaveAttach;
+
+  // the router array - enables us to match handlers to incoming requests
   var routes = [{
     method:'POST',
     url:/\/[\w\.]+\/containers\/create$/,
@@ -40,7 +48,9 @@ module.exports = function(opts){
       
     */
     handler:function(req, callback){
-      createHandler(req.ClientRequest, getImageData, function(err, ModifiedRequest){
+      createHandler(req.ClientRequest, {
+        getImageData:getImageData
+      }, function(err, ModifiedRequest){
         if(err) return callback(err)
         req.ClientRequest = ModifiedRequest;
         callback(null, req);
@@ -58,7 +68,10 @@ module.exports = function(opts){
       
     */
     handler:function(req, callback){
-      startHandler(req.ClientRequest, function(err){
+      startHandler(req.ClientRequest, {
+        getContainerData:getContainerData,
+        runWeaveAttach:runWeaveAttach
+      }, function(err){
         if(err) return callback(err)
         callback(null, req)
       })
