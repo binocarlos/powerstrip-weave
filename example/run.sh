@@ -4,7 +4,8 @@ max=100
 
 function tickcounter() {
   counter=$((counter+1))
-  echo $counter
+  let counterms=$counter*100
+  echo "$counterms ms elapsed"
   if (( counter >= max )); then
     quitcounter
   fi
@@ -19,11 +20,14 @@ function quitcounter() {
 
 function finishcounter() {
   let ms=$counter*100
+  echo "--------------------------------"
   echo "Network took: $ms ms to connect"
+  echo "Args: $@"
+  echo "--------------------------------"
   ifconfig;
 }
 
 while ! grep -q ^1$ /sys/class/net/ethwe/carrier 2>/dev/null
 do tickcounter
 done
-finishcounter
+finishcounter "$@"
