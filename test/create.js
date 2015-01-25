@@ -3,6 +3,11 @@ var create = require('../actions/create.js');
 var packet = require('./fixtures/create.json');
 var imagedata = require('./fixtures/image.json');
 
+// stub so we dont need docker
+var fetchImageData = function(imageName, done){
+  done(null, imagedata)
+}
+
 function getCreatePacket(includeWeaveENV, removeEntryPoint){
   var ret = JSON.parse(JSON.stringify(packet));
 
@@ -30,8 +35,9 @@ tape('inject --volumes-from=weavetools and remap entry point into a create packe
     Body:getCreatePacket(true)
   }
 
-  create(req, function(imageName, done){
-    done(null, imagedata)
+
+  create(req, {
+    fetchImageData:fetchImageData
   }, function(err, response){
 
     var responseBody = JSON.parse(response.Body)
@@ -53,8 +59,8 @@ tape('dont change create packet when there is no WEAVE_CIDR env', function(t){
   var copyReq = JSON.parse(JSON.stringify(req))
   var copyReqBody = JSON.parse(copyReq.Body)
 
-  create(req, function(imageName, done){
-    done(null, imagedata)
+  create(req, {
+    fetchImageData:fetchImageData
   }, function(err, response){
     var responseBody = typeof(response.Body)=='string' ? JSON.parse(response.Body) : response.Body;
 
@@ -76,8 +82,8 @@ tape('use the image entrypoint if the container has not specified one', function
   var copyReq = JSON.parse(JSON.stringify(req))
   var copyReqBody = JSON.parse(copyReq.Body)
 
-  create(req, function(imageName, done){
-    done(null, imagedata)
+  create(req, {
+    fetchImageData:fetchImageData
   }, function(err, response){
     var responseBody = typeof(response.Body)=='string' ? JSON.parse(response.Body) : response.Body;
 

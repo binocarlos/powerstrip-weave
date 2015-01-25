@@ -48,12 +48,12 @@ tape('the Adapter should route custom create and start handlers', function(t){
     getImageData:function(imageName, done){
       done(null, imagedata)
     },
-    create:function(req, fetchImageData, callback){
+    create:function(req, api, callback){
       seen.HasSeenCreate = 'yes';
       t.equal(req.Body.fruit, 'apples', 'request body has apples');
       callback(null, req);
     },
-    start:function(req, callback){
+    start:function(req, api, callback){
       seen.HasSeenStart = 'yes';
       t.equal(req.Body.fruit, 'oranges', 'request body has oranges');
       t.equal(req.Request, '/v1.16/containers/123/start', 'request url matches');
