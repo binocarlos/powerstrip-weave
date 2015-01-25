@@ -14,12 +14,13 @@ function tickcounter() {
 function quitcounter() {
   let ms=$counter*100
   echo "Network did not connect after $ms ms";
-  exit 1;
+  ifconfig;  
 }
 
 function finishcounter() {
   let ms=$counter*100
   echo "Network took: $ms ms to connect"
+  ifconfig;
 }
 
 while ! grep -q ^1$ /sys/class/net/ethwe/carrier 2>/dev/null
