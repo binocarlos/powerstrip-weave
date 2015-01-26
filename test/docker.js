@@ -122,7 +122,7 @@ tape('the example should run', function(t){
         t.ok(output.match(/Network took: 0 ms to connect/), 'The network connected immediately');
         t.ok(output.match(/ethwe     Link encap:Ethernet/), 'ethwe is connected');
         t.ok(output.match(/inet addr:10\.255\.0\.51/), 'ethwe has the IP 10.255.0.51');
-        t.ok(output.match(/Args: hello world/, 'the hello world args were passed'));
+        t.ok(output.match(/Args: hello world/), 'the hello world args were passed');
         next();
       })
     },
