@@ -66,6 +66,14 @@ cmd-shutdown(){
     binocarlos/powerstrip-weave stop
 }
 
+cmd-all(){
+  cmd-config
+  cmd-ps-weave
+  cmd-ps
+  cmd-weaverun
+  cmd-ps-weaverun
+}
+
 usage() {
   echo "Usage:"
   echo "example.sh config"
@@ -86,6 +94,7 @@ main() {
   ps)                 shift; cmd-ps "$@";;
   weaverun)           shift; cmd-weaverun "$@";;
   ps-weaverun)        shift; cmd-ps-weaverun "$@";;
+  all)                shift; cmd-all "$@";;
   shutdown)           shift; cmd-shutdown "$@";;
   *)                  usage "$@";;
   esac

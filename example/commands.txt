@@ -1,0 +1,7 @@
+./example/example config
+./example/example ps-debug
+./example/example ps-weave
+./example/example ps
+./example/example weaverun
+./example/example ps-weaverun
+./example/example shutdown
