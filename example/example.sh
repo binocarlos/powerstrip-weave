@@ -44,6 +44,7 @@ cmd-ps(){
 cmd-weaverun(){
   export DOCKER_HOST=
   CID=$(sudo weave run 10.255.0.50/8 binocarlos/powerstrip-weave-example hello world)
+  sleep 2
   docker logs $CID
   docker rm $CID
 }
@@ -51,6 +52,7 @@ cmd-weaverun(){
 cmd-ps-weaverun(){
   export DOCKER_HOST=127.0.0.1:2375
   CID=$(docker run -e "WEAVE_CIDR=10.255.0.51/8" -d binocarlos/powerstrip-weave-example hello world)
+  sleep 2
   docker logs $CID
   docker rm $CID
 }
