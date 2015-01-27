@@ -86,7 +86,7 @@ main() {
   ps)                 shift; cmd-ps "$@";;
   weaverun)           shift; cmd-weaverun "$@";;
   ps-weaverun)        shift; cmd-ps-weaverun "$@";;
-  config)             shift; cmd-config "$@";;
+  shutdown)           shift; cmd-shutdown "$@";;
   *)                  usage "$@";;
   esac
 }
