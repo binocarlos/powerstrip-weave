@@ -168,6 +168,44 @@ They key thing to note is that powerstrip-weave has grabbed the original `Entryp
 
 The effect this has is to eventually run the originally intended entrypoint but only AFTER the weave network has been connected.
 
+## running the fig example
+
+There is a very basic fig stack that connects two containers using weave IP addresses.  You can see the `fig.ynl file here:
+
+```yaml
+api:
+  build: api
+  command: node /srv/app/index.js
+  environment:
+   - WEAVE_CIDR=10.255.0.10/8
+   - REMOTE_VALUE=oranges
+server:
+  build: server
+  command: node /srv/app/index.js
+  ports:
+   - "8082:80"
+  environment:
+   - WEAVE_CIDR=10.255.0.11/8
+   - API_IP=10.255.0.10
+
+```
+
+To run this fig stack:
+
+```bash
+$ cd fig-example
+$ fig build
+$ DOCKER_HOST=tcp://127.0.0.1:2375 fig up
+```
+
+Then - in another window:
+
+```bash
+$ curl -L http://127.0.0.1:8082
+```
+
+You should see it print `oranges` - that is a value loaded from 2 servers connected using weave IP addresses - all initiated by fig using the vanilla docker client!
+
 ## shutdown
 
 To shutdown cleanly (i.e. stop weave and remove the wait-for-weave volume):
