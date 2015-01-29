@@ -15,7 +15,17 @@ module.exports = function(opts){
       
     */
     req.pipe(concat(function(body){
-      body = JSON.parse(body.toString());
+
+      body = body.toString();
+
+      try {
+        body = JSON.parse(body);
+      } catch (e) {
+        res.statusCode = 200;
+        res.end('');
+        return;        
+      }
+      
 
       /*
       
