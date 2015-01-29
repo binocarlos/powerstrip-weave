@@ -170,7 +170,7 @@ The effect this has is to eventually run the originally intended entrypoint but 
 
 ## running the fig example
 
-There is a very basic fig stack that connects two containers using weave IP addresses.  You can see the `fig.ynl file here:
+There is a very basic fig stack that connects two containers using weave IP addresses.  You can see the `fig.yml` file here:
 
 ```yaml
 api:
