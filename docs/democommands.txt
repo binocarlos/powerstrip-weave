@@ -1,0 +1,16 @@
+--------------------------------------------
+screen 1
+./example/example config
+./example/example ps-debug
+--------------------------------------------
+screen 2
+./example/example ps-weave
+./example/example ps
+./example/example weaverun
+./example/example ps-weaverun
+cd fig-example
+fig up
+curl -L http://127.0.0.1:8082
+DOCKER_HOST=tcp://127.0.0.1:2375 fig up
+curl -L http://127.0.0.1:8082
+./example/example shutdown
