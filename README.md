@@ -85,14 +85,6 @@ $ docker run -d --name mysql \
     binocarlos/mysql-server
 ```
 
-We can now run interactive jobs that get assigned a weave IP and will wait for the network to be ready:
-
-```bash
-$ docker run --rm -ti --name mysql-backup \
-    -e WEAVE_CIDR=10.255.0.2/8 \
-    binocarlos/mysql-backup 10.255.0.1
-```
-
 ## weave commands
 
 You can get the status of the weave network by running the `status` command:
