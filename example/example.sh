@@ -15,7 +15,7 @@ EOF
 }
 
 cmd-ps-debug(){
-  docker run -ti --rm \
+  docker run -d \
     --name powerstrip-debug \
     --expose 80 \
     binocarlos/powerstrip-debug
