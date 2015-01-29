@@ -76,7 +76,8 @@ You tell powerstrip-weave what IP address you want to give a container by using 
 ```bash
 $ docker run -d --name mysql \
     -e WEAVE_CIDR=10.255.0.1/8 \
-    binocarlos/mysql-server
+    -e MYSQL_ROOT_PASSWORD=mysecretpassword \
+    mysql
 ```
 
 ## weave commands
