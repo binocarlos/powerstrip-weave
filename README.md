@@ -3,12 +3,6 @@ powerstrip-weave
 
 A [Powerstrip](https://github.com/ClusterHQ/powerstrip) adapter that runs [weave](https://github.com/zettio/weave) inside a container and ensures that containers are connected to the weave network before running their entrypoints.
 
-## install
-
-```bash
-$ docker build -t binocarlos/powerstrip-weave .
-```
-
 ## run the adapter
 
 ```bash
