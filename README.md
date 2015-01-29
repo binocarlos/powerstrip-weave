@@ -121,6 +121,11 @@ $ docker run --rm \
     binocarlos/powerstrip-weave stop powerstrip-weave
 ```
 
+## examples
+There is a [walk-through example](https://github.com/binocarlos/powerstrip-weave/tree/master/example) of running powerstrip-weave.
+
+There is also an example of a [fig stack](https://github.com/binocarlos/powerstrip-weave/tree/master/example#running-the-fig-example) that links 2 containers using weave IP addresses.
+
 ## notes
 
  * [plan for this project](https://github.com/zettio/weave/issues/47#issuecomment-69471269)
