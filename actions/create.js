@@ -17,7 +17,7 @@ module.exports = function(req, api, callback){
 
   var getImageData = api.getImageData;
 
-  req.Body = JSON.parse(req.Body)
+  req.Body = JSON.parse(req.Body);
 
   /*
   
@@ -29,6 +29,7 @@ module.exports = function(req, api, callback){
   var weaveCidr = utils.extractWeaveEnv(req.Body.Env);
 
   if(!weaveCidr){
+    req.Body = JSON.stringify(req.Body)
     return callback(null, req)
   }
 
@@ -43,6 +44,12 @@ module.exports = function(req, api, callback){
   getImageData(ImageName, function(err, body){
 
     if(err) return callback(err)
+
+    if(body && body.indexOf('No such image')==0){
+      req.Body = JSON.stringify(req.Body)
+      callback(null, req);
+      return
+    }
 
     var ImageInfo = JSON.parse(body);
 
