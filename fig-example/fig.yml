@@ -12,3 +12,4 @@ server:
   environment:
    - WEAVE_CIDR=10.255.0.11/8
    - API_IP=10.255.0.10
+
