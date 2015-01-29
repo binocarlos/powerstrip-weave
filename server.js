@@ -26,7 +26,7 @@ module.exports = function(opts){
       adapter(body, function(err, body){
         if(err){
           res.statusCode = 500;
-          res.end(err);
+          res.end(err.toString());
         }
         else{
           res.statusCode = 200;
