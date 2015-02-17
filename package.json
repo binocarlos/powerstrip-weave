@@ -18,7 +18,8 @@
   },
   "devDependencies": {
     "async": "^0.9.0",
-    "tape": "^3.4.0",
-    "hyperquest": "^1.0.1"
+    "hyperquest": "^1.0.1",
+    "tap-spec": "^2.2.1",
+    "tape": "^3.4.0"
   }
 }
