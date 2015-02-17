@@ -12,7 +12,7 @@ function dockerRequest(path, done){
     res.setEncoding('utf8');
     res.pipe(concat(function(body){
       if(body) body = body.toString()
-      done(null, body)
+      done(null, body, res.headers)
     }))
   });
 

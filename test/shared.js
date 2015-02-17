@@ -22,7 +22,7 @@ function getCreatePacket(includeWeaveENV, removeEntryPoint){
 
 // stub so we dont need docker
 function getImageData(imageName, done){
-  done(null, JSON.stringify(imagedata))
+  done(null, JSON.stringify(imagedata), {})
 }
 
 // stub so we dont need docker

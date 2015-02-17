@@ -41,11 +41,12 @@ module.exports = function(req, api, callback){
     entrypoints / cmds
     
   */
-  getImageData(ImageName, function(err, body){
+  getImageData(ImageName, function(err, body, headers){
 
     if(err) return callback(err)
 
-    if(body && body.indexOf('No such image')==0){
+    // this is where the image was not found and the response is plain text
+    if(headers['content-type'] && headers['content-type'].indexOf('text/plain') === 0){
       req.Body = JSON.stringify(req.Body)
       callback(null, req);
       return
