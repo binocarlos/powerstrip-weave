@@ -85,7 +85,7 @@ $ docker run -d --name mysql \
 You can get the status of the weave network by running the `status` command:
 
 ```bash
-$ docker run --rm \
+$ docker run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /usr/bin/docker:/usr/bin/docker \
     binocarlos/powerstrip-weave status
