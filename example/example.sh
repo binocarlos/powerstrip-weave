@@ -7,6 +7,8 @@ endpoints:
     pre: [debug, weave, debug]
   "POST /*/containers/*/start":
     post: [debug, weave, debug]
+  "POST /*/containers/*/restart":
+    post: [debug, weave, debug]
 adapters:
   debug: http://debug/extension
   weave: http://weave/extension
@@ -15,23 +17,42 @@ EOF
 }
 
 cmd-ps-debug(){
-  docker run -d \
+  local mode="$1";
+  local runflag="-d";
+  if [[ "$mode" == "dev" ]]; then
+    runflag="-ti --rm"
+  fi
+  docker run $runflag \
     --name powerstrip-debug \
     --expose 80 \
     binocarlos/powerstrip-debug
 }
 
 cmd-ps-weave(){
-  docker run -d \
+  local mode="$1";
+  local runflag="-d";
+  local codevolume="";
+  local launchcommand="launch";
+  if [[ "$mode" == "dev" ]]; then
+    runflag="-ti --rm";
+    codevolume="-v /srv/projects/powerstrip-weave:/srv/app";
+    launchcommand="softlaunch";
+  fi
+  docker run $runflag \
     --name powerstrip-weave \
     --expose 80 \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /usr/bin/docker:/usr/bin/docker \
-    binocarlos/powerstrip-weave launch
+    -v /usr/bin/docker:/usr/bin/docker $codevolume \
+    binocarlos/powerstrip-weave $launchcommand
 }
 
 cmd-ps(){
-  docker run -d \
+  local mode="$1";
+  local runflag="-d";
+  if [[ "$mode" == "dev" ]]; then
+    runflag="-ti --rm"
+  fi
+  docker run $runflag \
     --name powerstrip \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v ~/powerstrip-demo/adapters.yml:/etc/powerstrip/adapters.yml \
