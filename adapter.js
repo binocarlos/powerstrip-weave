@@ -35,6 +35,16 @@ module.exports = function(opts){
   // the function used to ask weave to attach a container to a CIDR - overriden for the unit tests
   var runWeaveAttach = opts.runWeaveAttach || utils.runWeaveAttach;
 
+  function startHandlerWrapper(req, callback){
+    startHandler(req.ClientRequest, {
+      getContainerData:getContainerData,
+      runWeaveAttach:runWeaveAttach
+    }, function(err){
+      if(err) return callback(err)
+      callback(null, req)
+    })
+  }
+
   // the router array - enables us to match handlers to incoming requests
   var routes = [{
     method:'POST',
@@ -67,15 +77,18 @@ module.exports = function(opts){
       the start action does not change anything it just reads the container id and ENV 
       
     */
-    handler:function(req, callback){
-      startHandler(req.ClientRequest, {
-        getContainerData:getContainerData,
-        runWeaveAttach:runWeaveAttach
-      }, function(err){
-        if(err) return callback(err)
-        callback(null, req)
-      })
-    }
+    handler:startHandlerWrapper
+  },{
+    method:'POST',
+    url:/\/[\w\.]+\/containers\/\w+\/restart/,
+    type:'post-hook',
+    /*
+    
+      RESTART action
+      same as the start handler but once a container is restarted
+      
+    */
+    handler:startHandlerWrapper
   }];
 
   return function(req, callback){
