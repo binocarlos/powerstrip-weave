@@ -45,6 +45,8 @@ endpoints:
     pre: [weave]
   "POST /*/containers/*/start":
     post: [weave]
+  "POST /*/containers/*/restart":
+    post: [weave]
 adapters:
   weave: http://weave/v1/extension
 EOF
