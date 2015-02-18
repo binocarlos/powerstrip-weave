@@ -10,9 +10,8 @@
   "author": "Kai Davenport",
   "license": "MIT",
   "dependencies": {
-    
+    "concat-stream": "^1.4.7",
+    "hyperquest": "^1.0.1"
   },
-  "devDependencies": {
-
-  }
+  "devDependencies": {}
 }
