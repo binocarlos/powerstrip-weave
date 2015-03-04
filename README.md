@@ -9,7 +9,6 @@ A [Powerstrip](https://github.com/ClusterHQ/powerstrip) adapter that runs [weave
 $ docker run -d --name powerstrip-weave \
     --expose 80 \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /usr/bin/docker:/usr/bin/docker \
     binocarlos/powerstrip-weave launch
 ```
 
@@ -29,7 +28,6 @@ If you are running multiple servers that you want to connect using weave - you p
 $ docker run -d --name powerstrip-weave \
     --expose 80 \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /usr/bin/docker:/usr/bin/docker \
     binocarlos/powerstrip-weave launch 1.2.3.4 -password wEaVe
 ```
 
@@ -89,7 +87,6 @@ You can get the status of the weave network by running the `status` command:
 ```bash
 $ docker run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /usr/bin/docker:/usr/bin/docker \
     binocarlos/powerstrip-weave status
 ```
 
@@ -98,7 +95,6 @@ You can run normal weave network commands like `expose` and `attach`:
 ```bash
 $ docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /usr/bin/docker:/usr/bin/docker \
     binocarlos/powerstrip-weave expose 10.255.0.1/8
 ```
 
@@ -111,7 +107,6 @@ To shutdown cleanly (i.e. close the adapter / weave and remove the wait-for-weav
 ```bash
 $ docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /usr/bin/docker:/usr/bin/docker \
     binocarlos/powerstrip-weave stop
 ```
 
@@ -120,7 +115,6 @@ If you named the adapter container something different - pass the name as the fi
 ```bash
 $ docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /usr/bin/docker:/usr/bin/docker \
     binocarlos/powerstrip-weave stop powerstrip-weave
 ```
 
