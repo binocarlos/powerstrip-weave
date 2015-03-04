@@ -41,8 +41,7 @@ cmd-ps-weave(){
   docker run $runflag \
     --name powerstrip-weave \
     --expose 80 \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /usr/bin/docker:/usr/bin/docker $codevolume \
+    -v /var/run/docker.sock:/var/run/docker.sock $codevolume \
     binocarlos/powerstrip-weave $launchcommand
 }
 
@@ -57,7 +56,6 @@ cmd-ps(){
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v ~/powerstrip-demo/adapters.yml:/etc/powerstrip/adapters.yml \
     --link powerstrip-weave:weave \
-    --link powerstrip-debug:debug \
     -p 2375:2375 \
     clusterhq/powerstrip
 }
@@ -83,7 +81,6 @@ cmd-shutdown(){
   docker stop powerstrip && docker rm powerstrip
   docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /usr/bin/docker:/usr/bin/docker \
     binocarlos/powerstrip-weave stop
 }
 
