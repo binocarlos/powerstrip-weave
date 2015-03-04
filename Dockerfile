@@ -5,6 +5,7 @@ RUN apt-get -y update
 RUN apt-get -y install curl iptables
 RUN curl -o /usr/local/bin/weave https://raw.githubusercontent.com/zettio/weave/master/weave && chmod +x weave
 ADD . /srv/app
+ADD ./docker-1.3.1 /usr/bin/docker
 RUN chmod a+x /srv/app/run.sh
 RUN cd /srv/app && npm install
 EXPOSE 80
