@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export DOCKER_SOCKET=${DOCKER_SOCKET:=/var/run/docker.sock}
+
 cmd-weave-cli(){
   /usr/local/bin/weave "$@"
 }
@@ -11,7 +13,7 @@ cmd-weave(){
   docker run --rm \
     --net=host \
     --privileged \
-    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v $DOCKER_SOCKET:/var/run/docker.sock \
     -v /proc:/hostproc \
     -e PROCFS=/hostproc \
     binocarlos/powerstrip-weave weave "$@"
