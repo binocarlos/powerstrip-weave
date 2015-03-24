@@ -1,0 +1,11 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "kaorimatz/fedora-21-x86_64"
+  config.vm.network "private_network", ip: "10.0.0.2"
+   config.vm.provision "shell", inline: <<-SHELL
+     sudo yum install docker device-mapper-libs -y
+     sudo bash /vagrant/install.sh
+   SHELL
+end
