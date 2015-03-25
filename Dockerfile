@@ -3,7 +3,7 @@ MAINTAINER Kai Davenport <kaiyadavenport@gmail.com>
 WORKDIR /usr/local/bin
 RUN apt-get -y update
 RUN apt-get -y install curl iptables
-RUN curl -o /usr/local/bin/weave https://raw.githubusercontent.com/zettio/weave/master/weave && chmod +x weave
+RUN curl -o /usr/local/bin/weave https://github.com/zettio/weave/releases/download/latest_release/weave && chmod +x weave
 ADD . /srv/app
 ADD ./docker-1.3.1 /usr/bin/docker
 RUN chmod a+x /srv/app/run.sh
