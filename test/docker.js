@@ -31,6 +31,7 @@ tape('the example should run', function(t){
   }
 
   var containerID = null;
+  var closeContainers = []
 
   async.series([
 
@@ -96,6 +97,7 @@ tape('the example should run', function(t){
       runCommand(cmd, function(err, output){
         if(err) return next(err);
         containerID = output.replace(/\n$/, '');
+        closeContainers.push(containerID)
         console.log('# ' + containerID + ' is the container id');
         console.log('# waiting 2 seconds')
         setTimeout(next, 2 * 1000);
@@ -133,8 +135,12 @@ tape('the example should run', function(t){
     */
     function(next){
       console.log('# shutdown and remove containers');
-      var cmd = 'docker rm ' + containerID;
-      runCommand(cmd, next);
+
+      async.forEachSeries(closeContainers, function(cid, nextContainer){
+        var cmd = 'docker rm -f ' + containerID;
+        runCommand(cmd, nextContainer);
+      }, next)
+      
     },
 
     /*
