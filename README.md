@@ -123,6 +123,24 @@ There is a [walk-through example](https://github.com/binocarlos/powerstrip-weave
 
 There is also an example of a [fig stack](https://github.com/binocarlos/powerstrip-weave/tree/master/example#running-the-fig-example) that links 2 containers using weave IP addresses.
 
+## docker version
+You must be running the docker server API >= 1.15 - you can check which you have by doing this:
+
+```bash
+$ docker version
+Client version: 1.5.0
+Client API version: 1.17
+Go version (client): go1.4.1
+Git commit (client): a8a31ef
+OS/Arch (client): linux/amd64
+Server version: 1.5.0
+Server API version: 1.17
+Go version (server): go1.4.1
+Git commit (server): a8a31ef
+```
+
+The above shows a docker server version of 1.17 (so we are good)
+
 ## notes
 
  * [plan for this project](https://github.com/zettio/weave/issues/47#issuecomment-69471269)
