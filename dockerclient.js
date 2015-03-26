@@ -33,7 +33,7 @@ module.exports = {
     
   */
   container:function(id, done){
-    dockerRequest('/v1.16/containers/' + id + '/json', done)
+    dockerRequest('/v1.15/containers/' + id + '/json', done)
   },
 
   /*
@@ -44,6 +44,6 @@ module.exports = {
     
   */
   image:function(name, done){
-    dockerRequest('/v1.16/images/' + name + '/json', done)
+    dockerRequest('/v1.15/images/' + name + '/json', done)
   }
 }
