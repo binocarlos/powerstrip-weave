@@ -46,7 +46,6 @@ tape('the example should run', function(t){
         '--name powerstrip-weave',
         '--expose 80',
         '-v /var/run/docker.sock:/var/run/docker.sock',
-        '-v /usr/bin/docker:/usr/bin/docker',
         'binocarlos/powerstrip-weave launch'
       ].join(" ")
 
@@ -158,7 +157,6 @@ tape('the example should run', function(t){
       var cmd = [
         'docker run --rm',
         '-v /var/run/docker.sock:/var/run/docker.sock',
-        '-v /usr/bin/docker:/usr/bin/docker',
         'binocarlos/powerstrip-weave stop'
       ].join(" ")
 
