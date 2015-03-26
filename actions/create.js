@@ -9,15 +9,18 @@
 */
 var utils = require('../utils')
 var dockerclient = require('../dockerclient')
-
+var debug = require('debug')
 const WAIT_FOR_WEAVE_PATH = '/home/weavewait/wait-for-weave';
 const WAIT_FOR_WEAVE_VOLUME = 'weavewait:ro';
+
+var log = debug('action:create')
 
 module.exports = function(req, api, callback){
 
   var getImageData = api.getImageData;
 
   req.Body = JSON.parse(req.Body);
+
 
   /*
   
@@ -34,6 +37,11 @@ module.exports = function(req, api, callback){
   }
 
   var ImageName = req.Body.Image;
+
+  log('create request')
+  log(JSON.stringify(req.Body, null, 4))
+  log('CIDR: %s', weaveCidr)
+  log('Image: %s', ImageName)
 
   /*
   
@@ -54,6 +62,9 @@ module.exports = function(req, api, callback){
 
     var ImageInfo = JSON.parse(body);
 
+    log('Image response: %s', ImageName)
+    log(JSON.stringify(ImageInfo, null, 4))
+
     var ImageEntry = ImageInfo.Config.Entrypoint;
     var ImageCmd = ImageInfo.Config.Cmd;
     var ContainerEntry = req.Body.Entrypoint;
@@ -69,7 +80,12 @@ module.exports = function(req, api, callback){
     }
 
     req.Body.HostConfig.VolumesFrom.push(WAIT_FOR_WEAVE_VOLUME);    
+
+    log('Changed container: %s', ImageName)
+    log(JSON.stringify(req.Body, null, 4))
+
     req.Body = JSON.stringify(req.Body)
+
     callback(null, req);
   })
   
