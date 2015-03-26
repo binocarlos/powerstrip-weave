@@ -13,9 +13,10 @@
   "author": "Kai Davenport",
   "license": "MIT",
   "dependencies": {
+    "async": "^0.9.0",
     "concat-stream": "^1.4.7",
-    "minimist": "^1.1.0",
-    "async": "^0.9.0"
+    "debug": "^2.1.3",
+    "minimist": "^1.1.0"
   },
   "devDependencies": {
     "hyperquest": "^1.0.1",
