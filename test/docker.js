@@ -31,7 +31,8 @@ tape('the example should run', function(t){
   }
 
   var containerID = null;
-  var closeContainers = []
+  var pingContainerID = null;
+  var closeContainers = [];
 
   async.series([
 
@@ -130,6 +131,69 @@ tape('the example should run', function(t){
 
     /*
     
+      run a container that has 2 weave IP addresses
+      
+    */
+    function(next){
+      var cmd = 'DOCKER_HOST=tcp://127.0.0.1:2375 docker run -e "WEAVE_CIDR=10.255.0.61/8" -d ubuntu /bin/bash -c "while true; do sleep 5; done"';
+
+      console.log('# running: ' + cmd);
+
+      runCommand(cmd, function(err, output){
+        if(err) return next(err);
+        var containerID = output.replace(/\n$/, '');
+        closeContainers.push(containerID)
+        console.log('# ' + containerID + ' is the container id');
+        console.log('# waiting 2 seconds')
+        setTimeout(next, 2 * 1000);
+      })
+    },
+
+    /*
+    
+      run another container that will ping both IP addresses
+      
+    */
+    function(next){
+      var cmd = 'DOCKER_HOST=tcp://127.0.0.1:2375 docker run -e "WEAVE_CIDR=10.255.0.63/8" -d ubuntu /bin/bash -c "sleep 1 && ping -c 1 10.255.0.61 && ping -c 1 10.255.0.62"';
+
+      console.log('# running: ' + cmd);
+
+      runCommand(cmd, function(err, output){
+        if(err) return next(err);
+        pingContainerID = output.replace(/\n$/, '');
+        closeContainers.push(pingContainerID)
+        console.log('# ' + pingContainerID + ' is the container id');
+        console.log('# waiting 2 seconds')
+        setTimeout(next, 2 * 1000);
+      })
+    },
+
+    /*
+    
+      check the output of the ping container
+      
+    */
+    function(next){
+      var cmd = 'docker logs ' + pingContainerID;
+
+      console.log('# running ' + cmd);
+      runCommand(cmd, function(err, output){
+        if(err) return next(err);
+
+        output.split("\n").forEach(function(line){
+          console.log('#  ' + line);
+        })
+
+        t.ok(output.match(/bytes from 10\.255\.0\.61: icmp_seq/), 'ping the 10.255.0.61 address');
+        t.ok(output.match(/bytes from 10\.255\.0\.62: icmp_seq/), 'ping the 10.255.0.62 address');
+       
+        next();
+      })
+    },
+
+    /*
+    
       remove the example container
       
     */
@@ -137,7 +201,7 @@ tape('the example should run', function(t){
       console.log('# shutdown and remove containers');
 
       async.forEachSeries(closeContainers, function(cid, nextContainer){
-        var cmd = 'docker rm -f ' + containerID;
+        var cmd = 'docker rm -f ' + cid;
         runCommand(cmd, nextContainer);
       }, next)
       
