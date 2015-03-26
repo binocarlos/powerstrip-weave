@@ -49,8 +49,6 @@ module.exports = function(req, api, callback){
     async.forEachSeries(attachIPs, function(attachIP, nextIP){
       runWeaveAttach(attachIP, containerID, nextIP)
     }, function(err){
-      if(err) return callback(err)
-      log('attach container done: %s -> %s', containerID, weaveCidr)
       callback(null, req)
     })
 

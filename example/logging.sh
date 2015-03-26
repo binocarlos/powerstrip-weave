@@ -19,8 +19,9 @@ cmd-ps-weave(){
   docker run -d \
     --name powerstrip-weave \
     --expose 80 \
+    -e DEBUG=* \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    binocarlos/powerstrip-weave launch
+    binocarlos/powerstrip-weave:logging launch
 }
 
 cmd-ps(){
@@ -51,12 +52,6 @@ cmd-all(){
   cmd-config
   cmd-ps-weave
   cmd-ps
-  sleep 2
-  cmd-ps-weaverun
-  sleep 2
-  docker logs powerstrip
-  docker logs powerstrip-weave
-  cmd-shutdown
 }
 
 usage() {
