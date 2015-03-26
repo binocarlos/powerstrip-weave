@@ -135,7 +135,7 @@ tape('the example should run', function(t){
       
     */
     function(next){
-      var cmd = 'DOCKER_HOST=tcp://127.0.0.1:2375 docker run -e "WEAVE_CIDR=10.255.0.61/8" -d ubuntu /bin/bash -c "while true; do sleep 5; done"';
+      var cmd = 'DOCKER_HOST=tcp://127.0.0.1:2375 docker run -e "WEAVE_CIDR=10.255.0.61/8,10.255.0.62/8" -d ubuntu /bin/bash -c "while true; do sleep 5; done"';
 
       console.log('# running: ' + cmd);
 

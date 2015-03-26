@@ -8,6 +8,7 @@
 */
 var hyperquest = require('hyperquest');
 var utils = require('../utils');
+var async = require('async');
 
 var dockerclient = require('../dockerclient');
 
@@ -38,11 +39,13 @@ module.exports = function(req, api, callback){
     // there is no WEAVE_CIDR environment variable so just return - no weave today
     if(!weaveCidr) return callback(null, req);
 
-    // tell weave to attach the CIDR to the containerID
-    runWeaveAttach(weaveCidr, containerID, function(err){
-      if(err) return callback(err);
-      // the network should be attaching itself and the wait-for-weave doing its thing!
-      callback(null, req);
+    var attachIPs = weaveCidr.split(/\s*,\s*/)
+
+    async.forEachSeries(attachIPs, function(attachIP, nextIP){
+      runWeaveAttach(attachIP, containerID, nextIP)
+    }, function(err){
+      if(err) return callback(err)
+      callback(null, req)
     })
 
   })
