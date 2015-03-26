@@ -2,6 +2,9 @@
 
 # a script that will build docker 1.3.1 as a client only binary
 
+rm -rf /tmp/build-client-docker
+mkdir -p /tmp/build-client-docker
+cd /tmp/build-client-docker
 git clone https://github.com/docker/docker
 cd docker
 git checkout tags/v1.3.1
