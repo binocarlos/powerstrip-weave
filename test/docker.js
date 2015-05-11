@@ -47,6 +47,7 @@ tape('the example should run', function(t){
         'docker run -d',
         '--name powerstrip-weave',
         '--expose 80',
+        '-e DOCKER_SOCKET=/var/run/docker.sock',
         '-v /var/run/docker.sock:/var/run/docker.sock',
         'binocarlos/powerstrip-weave launch'
       ].join(" ")
@@ -68,7 +69,7 @@ tape('the example should run', function(t){
         '-v ' + adapterConfig + ':/etc/powerstrip/adapters.yml',
         '--link powerstrip-weave:weave',
         '-p 2375:2375',
-        'clusterhq/powerstrip'
+        'clusterhq/powerstrip:v0.0.1'
       ].join(" ")
 
       runCommand(cmd, next);

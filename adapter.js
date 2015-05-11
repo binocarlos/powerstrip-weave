@@ -3,6 +3,8 @@ var start = require('./actions/start');
 var responder = require('./responder');
 var dockerclient = require('./dockerclient')
 var utils = require('./utils')
+var debug = require('debug')
+var log = debug('router')
 
 /*
 
@@ -48,7 +50,7 @@ module.exports = function(opts){
   // the router array - enables us to match handlers to incoming requests
   var routes = [{
     method:'POST',
-    url:/\/[\w\.]+\/containers\/create$/,
+    url:/^(\/[\w\.]+)?\/containers\/create/,
     type:'pre-hook',
     /*
     
@@ -68,7 +70,7 @@ module.exports = function(opts){
     }
   },{
     method:'POST',
-    url:/\/[\w\.]+\/containers\/\w+\/start/,
+    url:/^(\/[\w\.]+)?\/containers\/\w+\/start/,
     type:'post-hook',
     /*
     
@@ -80,7 +82,7 @@ module.exports = function(opts){
     handler:startHandlerWrapper
   },{
     method:'POST',
-    url:/\/[\w\.]+\/containers\/\w+\/restart/,
+    url:/^(\/[\w\.]+)?\/containers\/\w+\/restart/,
     type:'post-hook',
     /*
     
@@ -93,16 +95,24 @@ module.exports = function(opts){
 
   return function(req, callback){
 
+    var url = req.ClientRequest.Request || '';
+    log('ROUTING')
+    log(req.ClientRequest.Method + ' ' + url)
+
     // loop over the registered routes to find a handler for this request
     var handler;
     routes.forEach(function(route){
       if(handler) return;
-      var url = req.ClientRequest.Request || '';
+      
       if(route.method==req.ClientRequest.Method && route.type==req.Type && url.match(route.url)){
         handler = route.handler;
       }
     })
 
+    if(!handler){
+      log('NO ROUTE FOUND')
+    }
+    
     // if no handler is found then we return the request unmolested
     handler = handler || noopHandler;
 

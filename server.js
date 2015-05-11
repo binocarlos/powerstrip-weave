@@ -1,6 +1,8 @@
 var http = require('http');
 var concat = require('concat-stream');
 var Adapter = require('./adapter');
+var debug = require('debug')
+var log = debug('server')
 
 module.exports = function(opts){
 
@@ -23,8 +25,11 @@ module.exports = function(opts){
       } catch (e) {
         res.statusCode = 200;
         res.end('');
+        log('ERROR: ' + e.toString())
         return;        
       }
+
+      log(JSON.stringify(body, null, 4))
       
 
       /*
@@ -37,10 +42,13 @@ module.exports = function(opts){
         if(err){
           res.statusCode = 500;
           res.end(err.toString());
+          log('ERROR: ' + e.toString())
         }
         else{
           res.statusCode = 200;
           res.setHeader('Content-type', 'application/json');
+          log('AFTER ADAPTER')
+          log(JSON.stringify(body, null, 4))
           body = JSON.stringify(body);
           res.end(body);
         }
